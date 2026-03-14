@@ -508,7 +508,6 @@
 
 <script>
 (function() {
-  // ── 커서 ──
   var wand = document.getElementById('wand');
   var COLORS = ['#ff8fab','#ffb3c6','#f472b6','#ffc8dd','#ff6b9d','#fda4af','#e879a0','#ffccd5'];
   var lastX = -999, lastY = -999;
@@ -584,7 +583,7 @@
     document.getElementById('icon-moon').style.display = isLight ? 'block' : 'none';
   });
 
-  // ── UI 로딩 모핑 도형 ──
+  // 모핑 도형
   var morphSvg = document.getElementById('morph-svg');
   if (morphSvg) {
     var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -593,31 +592,24 @@
     var start = null;
 
     function ease(t) { return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
-    function lerp(a, b, t) { return a + (b-a)*t; }
 
-    // 도형 정의: 각 도형을 path로 표현 (50x50 기준 중심 0,0)
-    // 1. 원
     function circlePath(r) {
       return 'M'+r+',0 A'+r+','+r+' 0 1,1 -'+r+',0 A'+r+','+r+' 0 1,1 '+r+',0 Z';
     }
-    // 2. 둥근 사각형 (pill)
     function pillPath(w, h, rx) {
-      var x = w/2, y = h/2;
+      var x=w/2, y=h/2;
       return 'M'+(x-rx)+','+-y+' Q'+x+','+-y+' '+x+','+(-(y-rx))+
              ' L'+x+','+(y-rx)+' Q'+x+','+y+' '+(x-rx)+','+y+
              ' L'+(-(x-rx))+','+y+' Q'+-x+','+y+' '+-x+','+(y-rx)+
              ' L'+-x+','+(-(y-rx))+' Q'+-x+','+-y+' '+(-(x-rx))+','+-y+' Z';
     }
-    // 3. 다이아몬드
     function diamondPath(r) {
       return 'M0,'+-r+' L'+r+',0 L0,'+r+' L'+-r+',0 Z';
     }
-    // 4. 삼각형
     function triPath(r) {
-      var h = r * Math.sqrt(3) / 2;
+      var h=r*Math.sqrt(3)/2;
       return 'M0,'+(-(r*0.8))+' L'+(h*0.9)+','+(r*0.5)+' L'+(-(h*0.9))+','+(r*0.5)+' Z';
     }
-    // 5. 십자 (플러스)
     function crossPath(r, w) {
       return 'M'+-w+','+-r+' L'+w+','+-r+' L'+w+','+-w+' L'+r+','+-w+
              ' L'+r+','+w+' L'+w+','+w+' L'+w+','+r+
@@ -627,47 +619,29 @@
 
     var shapes = [
       circlePath(44),
-      pillPath(88, 50, 25),
+      pillPath(88,50,25),
       diamondPath(50),
       triPath(52),
-      crossPath(44, 15),
+      crossPath(44,15),
       circlePath(44),
     ];
-
-    // 각 전환 시간
-    var steps = [0, 0.18, 0.36, 0.54, 0.72, 0.88, 1.0];
+    var steps = [0,0.18,0.36,0.54,0.72,0.88,1.0];
 
     function frame(ts) {
       if (!start) start = ts;
       var t = ((ts - start) % LOOP) / LOOP;
-
-      // 현재 단계 찾기
       var si = 0;
-      for (var i = 0; i < steps.length - 1; i++) {
+      for (var i = 0; i < steps.length-1; i++) {
         if (t >= steps[i] && t < steps[i+1]) { si = i; break; }
       }
-
       var lt = (t - steps[si]) / (steps[si+1] - steps[si]);
       var et = ease(lt);
-
-      // 도형 전환: 0.0~0.1 = 유지, 0.1~1.0 = 모핑
-      var holdRatio = 0.25;
-      var morphT = lt < holdRatio ? 0 : ease((lt - holdRatio) / (1 - holdRatio));
-
-      var rot = t * 180; // 한 루프에 반바퀴
+      var rot = t * 180;
       var sc = 1, op = 1;
-
-      // 마지막 구간: 사라졌다 뿅
-      if (si === shapes.length - 1) {
-        sc = 1 - et; op = 1 - et;
-      }
-
-      var curPath = si < shapes.length - 1 ? shapes[si] : shapes[shapes.length-2];
-      var c = '#c8b89a';
-
-      g.setAttribute('transform', 'rotate('+rot.toFixed(1)+') scale('+sc.toFixed(3)+')');
-      g.innerHTML = '<path d="'+curPath+'" fill="'+c+'" opacity="'+(op*0.75).toFixed(3)+'"/>';
-
+      if (si === shapes.length-1) { sc = 1-et; op = 1-et; }
+      var pathD = si < shapes.length-1 ? shapes[si] : shapes[shapes.length-2];
+      g.setAttribute('transform','rotate('+rot.toFixed(1)+') scale('+sc.toFixed(3)+')');
+      g.innerHTML = '<path d="'+pathD+'" fill="#c8b89a" opacity="'+(op*0.75).toFixed(3)+'"/>';
       requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
