@@ -79,23 +79,6 @@
   .hero-meta { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 2.5rem; font-size: 0.75rem; font-weight: 300; color: var(--muted); letter-spacing: 0.06em; }
   .hero-meta-div { color: var(--line2); } align-items: center; gap: 0.8rem; text-decoration: none; color: var(--text); font-size: 0.75rem; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; border-bottom: 1px solid var(--accent); padding-bottom: 0.3rem; transition: gap 0.3s, color 0.3s; }
   .hero-cta:hover { gap: 1.4rem; color: var(--accent); }
-
-  /* ── HERO CHARACTER ── */
-  .hero-char {
-    position: absolute;
-    right: 5rem; bottom: 3rem;
-    width: 130px; opacity: 0.88;
-    animation: charFloat 3.8s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 1;
-  }
-  @keyframes charFloat {
-    0%   { transform: translateY(0px) rotate(-2deg); }
-    30%  { transform: translateY(-10px) rotate(1deg); }
-    60%  { transform: translateY(-5px) rotate(-1deg); }
-    100% { transform: translateY(0px) rotate(-2deg); }
-  }
-  @media (max-width: 640px) { .hero-char { width: 80px; right: 1rem; bottom: 5rem; } }
   .hero-index { position: absolute; right: 3rem; bottom: 5rem; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; writing-mode: vertical-rl; }
 
   /* ── ABOUT ── */
@@ -186,22 +169,6 @@
     .contact-grid-bottom { grid-template-columns: repeat(2, 1fr); }
     footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
   
-  /* ── HERO CHARACTER ── */
-  .hero-char {
-    position: absolute;
-    right: 5rem; bottom: 3rem;
-    width: 130px; opacity: 0.88;
-    animation: charFloat 3.8s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 1;
-  }
-  @keyframes charFloat {
-    0%   { transform: translateY(0px) rotate(-2deg); }
-    30%  { transform: translateY(-10px) rotate(1deg); }
-    60%  { transform: translateY(-5px) rotate(-1deg); }
-    100% { transform: translateY(0px) rotate(-2deg); }
-  }
-  @media (max-width: 640px) { .hero-char { width: 80px; right: 1rem; bottom: 5rem; } }
   .hero-index { display: none; }
     .exp-item { grid-template-columns: 1fr; gap: 0.8rem; }
   }
@@ -278,68 +245,6 @@
   </div>
   <a class="hero-cta" href="#works">View Works →</a>
   <div class="hero-index">Portfolio 2025</div>
-  <div class="hero-char">
-    <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- 귀 왼쪽 -->
-      <path d="M62 28 C58 10 48 5 44 18 L52 45 Z" fill="#ffb3d1" stroke="#ff6ba8" stroke-width="3" stroke-linejoin="round"/>
-      <!-- 귀 오른쪽 -->
-      <path d="M138 28 C142 10 152 5 156 18 L148 45 Z" fill="#ffb3d1" stroke="#ff6ba8" stroke-width="3" stroke-linejoin="round"/>
-      <!-- 머리 -->
-      <ellipse cx="100" cy="72" rx="52" ry="48" fill="#ffd6e8" stroke="#ff6ba8" stroke-width="3.5"/>
-      <!-- 얼굴 마스크 (어두운 부분) -->
-      <ellipse cx="100" cy="78" rx="36" ry="32" fill="#ff8fb8" stroke="#ff6ba8" stroke-width="2"/>
-      <!-- 눈 왼쪽 -->
-      <circle cx="86" cy="70" r="5" fill="#1a0020"/>
-      <circle cx="88" cy="68" r="1.5" fill="white" opacity="0.7"/>
-      <!-- 눈 오른쪽 -->
-      <circle cx="114" cy="70" r="5" fill="#1a0020"/>
-      <circle cx="116" cy="68" r="1.5" fill="white" opacity="0.7"/>
-      <!-- 코 -->
-      <ellipse cx="100" cy="80" rx="4" ry="2.5" fill="#1a0020"/>
-      <!-- 입 -->
-      <path d="M92 88 Q100 94 108 88" stroke="#1a0020" stroke-width="2" stroke-linecap="round" fill="none"/>
-      <!-- 몸통 -->
-      <path d="M60 110 Q55 160 58 200 Q80 210 100 210 Q120 210 142 200 Q145 160 140 110 Q120 100 100 100 Q80 100 60 110Z" fill="#ffd6e8" stroke="#ff6ba8" stroke-width="3.5" stroke-linejoin="round"/>
-      <!-- 배 밝은 부분 -->
-      <ellipse cx="100" cy="158" rx="26" ry="34" fill="#ffe8f2" stroke="#ffb3d1" stroke-width="1.5"/>
-
-      <!-- 왼쪽 팔 (하트 마법봉 들고있음) -->
-      <path d="M60 118 Q38 112 22 100" stroke="#ff6ba8" stroke-width="14" stroke-linecap="round"/>
-      <path d="M60 118 Q38 112 22 100" stroke="#ffd6e8" stroke-width="10" stroke-linecap="round"/>
-
-      <!-- 하트 마법봉 (왼손) -->
-      <!-- 봉 -->
-      <line x1="22" y1="100" x2="6" y2="68" stroke="#9b59c2" stroke-width="4" stroke-linecap="round"/>
-      <line x1="22" y1="100" x2="6" y2="68" stroke="#d8b4fe" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-      <!-- 봉 손잡이 -->
-      <circle cx="23" cy="102" r="4" fill="#e9d5ff" stroke="#7c3aed" stroke-width="1.5"/>
-      <!-- 봉 끝 하트 (45도 기울어짐) -->
-      <g transform="translate(6,68) rotate(-45)">
-        <path d="M0,4 C0,1.5 -2.5,0 -4.8,0 C-7.2,0 -8.8,2 -8.8,4.4 C-8.8,8.5 0,13.5 0,13.5 C0,13.5 8.8,8.5 8.8,4.4 C8.8,2 7.2,0 4.8,0 C2.5,0 0,1.5 0,4Z" fill="#1a0020"/>
-        <path d="M0,3.8 C0,1.5 -2.3,0 -4.5,0 C-6.8,0 -8.3,1.8 -8.3,4.2 C-8.3,8 0,12.8 0,12.8 C0,12.8 8.3,8 8.3,4.2 C8.3,1.8 6.8,0 4.5,0 C2.3,0 0,1.5 0,3.8Z" fill="#fb7185"/>
-        <circle cx="-3" cy="2.2" r="1.5" fill="white" opacity="0.4"/>
-      </g>
-      <!-- 봉 주변 반짝이 -->
-      <path d="M-2,50 L-1,53 L2,54 L-1,55 L-2,58 L-3,55 L-6,54 L-3,53Z" fill="#fbbf24" stroke="#92400e" stroke-width="0.4"/>
-      <path d="M18,44 L18.7,46.5 L21,47.2 L18.7,47.9 L18,50.4 L17.3,47.9 L15,47.2 L17.3,46.5Z" fill="#fbbf24" stroke="#92400e" stroke-width="0.4"/>
-
-      <!-- 오른쪽 팔 (들어올림) -->
-      <path d="M140 118 Q162 108 176 92" stroke="#ff6ba8" stroke-width="14" stroke-linecap="round"/>
-      <path d="M140 118 Q162 108 176 92" stroke="#ffd6e8" stroke-width="10" stroke-linecap="round"/>
-
-      <!-- 다리 왼쪽 -->
-      <path d="M78 200 Q74 218 72 228" stroke="#ff6ba8" stroke-width="13" stroke-linecap="round"/>
-      <path d="M78 200 Q74 218 72 228" stroke="#ffd6e8" stroke-width="9" stroke-linecap="round"/>
-      <!-- 발 왼쪽 -->
-      <ellipse cx="70" cy="230" rx="14" ry="7" fill="#ffd6e8" stroke="#ff6ba8" stroke-width="3"/>
-
-      <!-- 다리 오른쪽 -->
-      <path d="M122 200 Q126 218 128 228" stroke="#ff6ba8" stroke-width="13" stroke-linecap="round"/>
-      <path d="M122 200 Q126 218 128 228" stroke="#ffd6e8" stroke-width="9" stroke-linecap="round"/>
-      <!-- 발 오른쪽 -->
-      <ellipse cx="130" cy="230" rx="14" ry="7" fill="#ffd6e8" stroke="#ff6ba8" stroke-width="3"/>
-    </svg>
-  </div>
 </section>
 
 <!-- ABOUT -->
@@ -509,12 +414,12 @@
       <div class="contact-card-label">Phone</div>
       <div class="contact-card-value">010-4890-8913</div>
     </div>
-    <a class="contact-card" href="mailto:chaeeunj8913@gmail.com">
+    <a class="contact-card" href="/cdn-cgi/l/email-protection#27444f46424252494d1f1e161467404a464e4b0944484a">
       <div class="contact-card-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
       </div>
       <div class="contact-card-label">Email</div>
-      <div class="contact-card-value">chaeeunj8913@gmail.com</div>
+      <div class="contact-card-value"><span class="__cf_email__" data-cfemail="caa9a2abafafbfa4a0f2f3fbf98aada7aba3a6e4a9a5a7">[email&#160;protected]</span></div>
       <div class="contact-card-hint">메일 보내기 →</div>
     </a>
     <a class="contact-card" href="https://discord.com/users/dasa0" target="_blank">
@@ -534,7 +439,7 @@
   <span>Built with passion 🩷</span>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
   const wand = document.getElementById('wand');
   const COLORS = ['#ff8fab','#ffb3c6','#f472b6','#ffc8dd','#ff6b9d','#fda4af','#e879a0','#ffccd5'];
   let lastX = -999, lastY = -999;
@@ -562,45 +467,62 @@
     const color = COLORS[Math.floor(Math.random() * COLORS.length)];
     const rot = (Math.random() - 0.5) * 90;
     el.style.cssText = [
-      `left:${x - size/2}px`, `top:${y - size/2}px`,
-      `--tx:${vx}px`, `--ty:${vy}px`, `--ty60:${vy*0.45}px`,
-      `--rot:${rot}deg`, `--dur:${dur}s`, `--dly:${dly}s`,
+      'left:' + (x - size/2) + 'px',
+      'top:' + (y - size/2) + 'px',
+      '--tx:' + vx + 'px',
+      '--ty:' + vy + 'px',
+      '--ty60:' + (vy*0.45) + 'px',
+      '--rot:' + rot + 'deg',
+      '--dur:' + dur + 's',
+      '--dly:' + dly + 's',
     ].join(';');
     el.appendChild(makeHeartSVG(size, color));
     document.body.appendChild(el);
-    setTimeout(() => el.remove(), (dur + dly) * 1000 + 80);
+    setTimeout(function() { el.remove(); }, (dur + dly) * 1000 + 80);
   }
 
-  document.addEventListener('mousemove', e => {
-    const cx = e.clientX, cy = e.clientY;
+  document.addEventListener('mousemove', function(e) {
+    var cx = e.clientX, cy = e.clientY;
     wand.style.left = (cx - 19) + 'px';
     wand.style.top  = (cy - 19) + 'px';
-    const dist = Math.hypot(cx - lastX, cy - lastY);
+    var dist = Math.hypot(cx - lastX, cy - lastY);
     if (dist > 9) {
-      const n = Math.min(3, Math.floor(dist / 10) + 1);
-      for (let i = 0; i < n; i++) {
-        spawnHeart(cx + (Math.random()-0.5)*10, cy + (Math.random()-0.5)*10,
-          7 + Math.random()*9, (Math.random()-0.5)*28, 12 + Math.random()*28,
-          0.5 + Math.random()*0.35, Math.random()*0.07);
+      var n = Math.min(3, Math.floor(dist / 10) + 1);
+      for (var i = 0; i < n; i++) {
+        spawnHeart(
+          cx + (Math.random()-0.5)*10,
+          cy + (Math.random()-0.5)*10,
+          7 + Math.random()*9,
+          (Math.random()-0.5)*28,
+          12 + Math.random()*28,
+          0.5 + Math.random()*0.35,
+          Math.random()*0.07
+        );
       }
       lastX = cx; lastY = cy;
     }
   });
 
-  document.addEventListener('click', e => {
-    const cx = e.clientX, cy = e.clientY;
-    for (let i = 0; i < 22; i++) {
-      const angle = (i / 22) * Math.PI * 2;
-      const spd = 45 + Math.random() * 80;
+  document.addEventListener('click', function(e) {
+    var cx = e.clientX, cy = e.clientY;
+    for (var i = 0; i < 22; i++) {
+      var angle = (i / 22) * Math.PI * 2;
+      var spd = 45 + Math.random() * 80;
       spawnHeart(cx, cy, 9 + Math.random()*16, Math.cos(angle)*spd, Math.sin(angle)*spd, 0.6 + Math.random()*0.5, Math.random()*0.12);
     }
     spawnHeart(cx, cy - 8, 26, (Math.random()-0.5)*20, -75, 0.9, 0);
   });
 
-  document.querySelectorAll('a, button, .gallery-item').forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('is-hover'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('is-hover'));
+  document.querySelectorAll('a, button, .gallery-item').forEach(function(el) {
+    el.addEventListener('mouseenter', function() { document.body.classList.add('is-hover'); });
+    el.addEventListener('mouseleave', function() { document.body.classList.remove('is-hover'); });
   });
 
-  document.getElementById('theme-btn').addEventListener('click', () => {
-    const isLig
+  document.getElementById('theme-btn').addEventListener('click', function() {
+    var isLight = document.body.classList.toggle('light');
+    document.getElementById('icon-sun').style.display  = isLight ? 'none'  : 'block';
+    document.getElementById('icon-moon').style.display = isLight ? 'block' : 'none';
+  });
+</script>
+</body>
+</html>
