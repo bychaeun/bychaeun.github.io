@@ -73,8 +73,24 @@
   .hero-grid { position: absolute; inset: 0; opacity: 0.03; background-image: linear-gradient(var(--text) 1px, transparent 1px), linear-gradient(90deg, var(--text) 1px, transparent 1px); background-size: 80px 80px; }
   .hero-eyebrow { font-size: 0.805rem; font-weight: 400; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.625rem; display: flex; align-items: center; gap: 1.125rem; }
   .hero-eyebrow::before { content: ''; width: 40px; height: 1px; background: var(--accent); }
-  .hero-name { font-weight: 700; font-size: clamp(3.75rem, 8vw, 7.25rem); line-height: 0.95; letter-spacing: -0.02em; color: var(--accent2); position: relative; margin-bottom: 2.125rem; }
-  .hero-name span { display: block; color: var(--muted); font-size: 0.38em; font-weight: 300; letter-spacing: 0.06em; margin-top: 1.125rem; }
+  .hero-name { font-weight: 700; font-size: clamp(3.75rem, 8vw, 7.25rem); line-height: 0.95; letter-spacing: -0.02em; position: relative; margin-bottom: 2.125rem;
+    background: linear-gradient(110deg, #ffffff 0%, #ddc090 45%, #e08898 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    animation: nameGrad 5s ease infinite;
+  }
+  @keyframes nameGrad {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  body.light .hero-name {
+    background: linear-gradient(110deg, #111111 0%, #7a5020 45%, #901838 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    animation: nameGrad 5s ease infinite;
+  }
+  .hero-name span { display: block; -webkit-text-fill-color: var(--muted); color: var(--muted); font-size: 0.38em; font-weight: 300; letter-spacing: 0.06em; margin-top: 1.125rem; background: none; -webkit-background-clip: unset; background-clip: unset; animation: none; }
   .hero-desc { max-width: 560px; color: var(--muted); font-size: 1.005rem; font-weight: 400; line-height: 2; position: relative; margin-bottom: 3.125rem; }
   .hero-meta { display: flex; align-items: center; gap: 0.725rem; margin-bottom: 2.625rem; font-size: 0.875rem; font-weight: 300; color: var(--muted); letter-spacing: 0.06em; }
   .hero-meta-div { color: var(--line2); }
@@ -101,8 +117,31 @@
     100% { transform: rotate(360deg) scale(1); }
   }
   @media (max-width: 768px) { .hero-star { display: none; } }
+  /* ── 모핑 도형 ── */
+  .hero-morph {
+    position: absolute;
+    top: 50%; right: 5rem;
+    transform: translateY(-50%);
+    width: 100px; height: 100px;
+    pointer-events: none;
+  }
+  .hero-morph svg { width: 100%; height: 100%; overflow: visible; }
+  @media (max-width: 900px) { .hero-morph { display: none; } }
+
+  /* ── ABOUT ── */
   .about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 5rem; align-items: start; }
-  .about-title { font-weight: 700; font-size: clamp(2.05rem, 3.5vw, 3.05rem); line-height: 1.2; color: var(--accent2); margin-bottom: 2.125rem; }
+  .about-title { font-weight: 700; font-size: clamp(2.05rem, 3.5vw, 3.05rem); line-height: 1.2; margin-bottom: 2.125rem;
+    background: linear-gradient(110deg, #ffffff 0%, #ddc090 45%, #e08898 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    animation: nameGrad 5s ease infinite;
+  }
+  body.light .about-title {
+    background: linear-gradient(110deg, #111111 0%, #7a5020 45%, #901838 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    animation: nameGrad 5s ease infinite;
+  }
   .about-body { color: var(--muted); font-size: 1.025rem; font-weight: 400; line-height: 2.1; }
 
   /* ── SKILLS ── */
@@ -247,6 +286,14 @@
 <section class="hero" id="home">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
+
+  <!-- 모핑 별 도형 -->
+  <div class="hero-morph">
+    <svg id="morph-svg" viewBox="-110 -110 220 220">
+      <path id="morph-path" fill="none" stroke="#c8b89a" stroke-width="1.5" opacity="0.6"/>
+    </svg>
+  </div>
+
   <div class="hero-eyebrow">3D Background Modeler</div>
   <h1 class="hero-name">
     정채은
@@ -434,7 +481,7 @@
       <div class="contact-card-label">Phone</div>
       <div class="contact-card-value">010-4890-8913</div>
     </div>
-    <a class="contact-card" href="mailto:chaeeunj8913@gmail.com">
+    <a class="contact-card" href="/cdn-cgi/l/email-protection#600308010505150e0a5859515320070d01090c4e030f0d">
       <div class="contact-card-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
       </div>
@@ -460,21 +507,23 @@
 </footer>
 
 <script>
-  const wand = document.getElementById('wand');
-  const COLORS = ['#ff8fab','#ffb3c6','#f472b6','#ffc8dd','#ff6b9d','#fda4af','#e879a0','#ffccd5'];
-  let lastX = -999, lastY = -999;
+(function() {
+  // ── 커서 ──
+  var wand = document.getElementById('wand');
+  var COLORS = ['#ff8fab','#ffb3c6','#f472b6','#ffc8dd','#ff6b9d','#fda4af','#e879a0','#ffccd5'];
+  var lastX = -999, lastY = -999;
 
   function makeHeartSVG(size, color) {
-    const ns = 'http://www.w3.org/2000/svg';
-    const svg = document.createElementNS(ns, 'svg');
+    var ns = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(ns, 'svg');
     svg.setAttribute('width', size); svg.setAttribute('height', size);
     svg.setAttribute('viewBox', '-12 -2 24 20');
-    const path = document.createElementNS(ns, 'path');
+    var path = document.createElementNS(ns, 'path');
     path.setAttribute('d','M0,4.5 C0,1.8 -2.8,0 -5.5,0 C-8.2,0 -10,2.2 -10,5 C-10,9.5 0,16 0,16 C0,16 10,9.5 10,5 C10,2.2 8.2,0 5.5,0 C2.8,0 0,1.8 0,4.5 Z');
     path.setAttribute('fill', color);
     path.setAttribute('stroke','#9d174d'); path.setAttribute('stroke-width','0.6');
     svg.appendChild(path);
-    const hl = document.createElementNS(ns, 'circle');
+    var hl = document.createElementNS(ns, 'circle');
     hl.setAttribute('cx','-4'); hl.setAttribute('cy','3'); hl.setAttribute('r','1.8');
     hl.setAttribute('fill','white'); hl.setAttribute('opacity','0.4');
     svg.appendChild(hl);
@@ -482,10 +531,10 @@
   }
 
   function spawnHeart(x, y, size, vx, vy, dur, dly) {
-    const el = document.createElement('div');
+    var el = document.createElement('div');
     el.className = 'hp';
-    const color = COLORS[Math.floor(Math.random() * COLORS.length)];
-    const rot = (Math.random() - 0.5) * 90;
+    var color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    var rot = (Math.random() - 0.5) * 90;
     el.style.cssText = [
       'left:' + (x - size/2) + 'px',
       'top:' + (y - size/2) + 'px',
@@ -507,15 +556,9 @@
     wand.style.top  = (cy - 19) + 'px';
     var dist = Math.hypot(cx - lastX, cy - lastY);
     if (dist > 18) {
-      spawnHeart(
-        cx + (Math.random()-0.5)*8,
-        cy + (Math.random()-0.5)*8,
-        4 + Math.random()*5,
-        (Math.random()-0.5)*20,
-        8 + Math.random()*20,
-        0.4 + Math.random()*0.3,
-        Math.random()*0.05
-      );
+      spawnHeart(cx + (Math.random()-0.5)*8, cy + (Math.random()-0.5)*8,
+        4 + Math.random()*5, (Math.random()-0.5)*20, 8 + Math.random()*20,
+        0.4 + Math.random()*0.3, Math.random()*0.05);
       lastX = cx; lastY = cy;
     }
   });
@@ -540,6 +583,96 @@
     document.getElementById('icon-sun').style.display  = isLight ? 'none'  : 'block';
     document.getElementById('icon-moon').style.display = isLight ? 'block' : 'none';
   });
+
+  // ── UI 로딩 모핑 도형 ──
+  var morphSvg = document.getElementById('morph-svg');
+  if (morphSvg) {
+    var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    morphSvg.appendChild(g);
+    var LOOP = 3200;
+    var start = null;
+
+    function ease(t) { return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
+    function lerp(a, b, t) { return a + (b-a)*t; }
+
+    // 도형 정의: 각 도형을 path로 표현 (50x50 기준 중심 0,0)
+    // 1. 원
+    function circlePath(r) {
+      return 'M'+r+',0 A'+r+','+r+' 0 1,1 -'+r+',0 A'+r+','+r+' 0 1,1 '+r+',0 Z';
+    }
+    // 2. 둥근 사각형 (pill)
+    function pillPath(w, h, rx) {
+      var x = w/2, y = h/2;
+      return 'M'+(x-rx)+','+-y+' Q'+x+','+-y+' '+x+','+(-(y-rx))+
+             ' L'+x+','+(y-rx)+' Q'+x+','+y+' '+(x-rx)+','+y+
+             ' L'+(-(x-rx))+','+y+' Q'+-x+','+y+' '+-x+','+(y-rx)+
+             ' L'+-x+','+(-(y-rx))+' Q'+-x+','+-y+' '+(-(x-rx))+','+-y+' Z';
+    }
+    // 3. 다이아몬드
+    function diamondPath(r) {
+      return 'M0,'+-r+' L'+r+',0 L0,'+r+' L'+-r+',0 Z';
+    }
+    // 4. 삼각형
+    function triPath(r) {
+      var h = r * Math.sqrt(3) / 2;
+      return 'M0,'+(-(r*0.8))+' L'+(h*0.9)+','+(r*0.5)+' L'+(-(h*0.9))+','+(r*0.5)+' Z';
+    }
+    // 5. 십자 (플러스)
+    function crossPath(r, w) {
+      return 'M'+-w+','+-r+' L'+w+','+-r+' L'+w+','+-w+' L'+r+','+-w+
+             ' L'+r+','+w+' L'+w+','+w+' L'+w+','+r+
+             ' L'+-w+','+r+' L'+-w+','+w+' L'+-r+','+w+
+             ' L'+-r+','+-w+' L'+-w+','+-w+' Z';
+    }
+
+    var shapes = [
+      circlePath(44),
+      pillPath(88, 50, 25),
+      diamondPath(50),
+      triPath(52),
+      crossPath(44, 15),
+      circlePath(44),
+    ];
+
+    // 각 전환 시간
+    var steps = [0, 0.18, 0.36, 0.54, 0.72, 0.88, 1.0];
+
+    function frame(ts) {
+      if (!start) start = ts;
+      var t = ((ts - start) % LOOP) / LOOP;
+
+      // 현재 단계 찾기
+      var si = 0;
+      for (var i = 0; i < steps.length - 1; i++) {
+        if (t >= steps[i] && t < steps[i+1]) { si = i; break; }
+      }
+
+      var lt = (t - steps[si]) / (steps[si+1] - steps[si]);
+      var et = ease(lt);
+
+      // 도형 전환: 0.0~0.1 = 유지, 0.1~1.0 = 모핑
+      var holdRatio = 0.25;
+      var morphT = lt < holdRatio ? 0 : ease((lt - holdRatio) / (1 - holdRatio));
+
+      var rot = t * 180; // 한 루프에 반바퀴
+      var sc = 1, op = 1;
+
+      // 마지막 구간: 사라졌다 뿅
+      if (si === shapes.length - 1) {
+        sc = 1 - et; op = 1 - et;
+      }
+
+      var curPath = si < shapes.length - 1 ? shapes[si] : shapes[shapes.length-2];
+      var c = '#c8b89a';
+
+      g.setAttribute('transform', 'rotate('+rot.toFixed(1)+') scale('+sc.toFixed(3)+')');
+      g.innerHTML = '<path d="'+curPath+'" fill="'+c+'" opacity="'+(op*0.75).toFixed(3)+'"/>';
+
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+})();
 </script>
 </body>
 </html>
