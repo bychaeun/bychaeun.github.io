@@ -12,19 +12,19 @@
   :root {
     --bg: #0a0a0a; --bg2: #111; --bg3: #1a1a1a;
     --line: rgba(255,255,255,0.08); --line2: rgba(255,255,255,0.15);
-    --text: #f0ede8; --muted: #888882; --accent: #c8b89a; --accent2: #e8ddd0;
+    --text: #f5f5f5; --muted: #b0ada8; --accent: #c8b89a; --accent2: #ffffff;
     --nav-bg: rgba(10,10,10,0.88);
     --font: 'SUIT Variable', 'SUIT', sans-serif;
   }
   body.light {
     --bg: #f5f2ee; --bg2: #edeae5; --bg3: #e4e0da;
     --line: rgba(0,0,0,0.08); --line2: rgba(0,0,0,0.13);
-    --text: #1a1714; --muted: #7a7570; --accent: #8a6a3a; --accent2: #3a2a10;
+    --text: #0a0a0a; --muted: #444440; --accent: #7a5a2a; --accent2: #0a0a0a;
     --nav-bg: rgba(245,242,238,0.9);
   }
 
   html { scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--text); font-family: var(--font); font-weight: 300; line-height: 1.7; min-height: 100vh; transition: background 0.3s, color 0.3s; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); font-weight: 400; line-height: 1.7; min-height: 100vh; transition: background 0.3s, color 0.3s; }
 
   /* ── WAND ── */
   #wand { position: fixed; z-index: 99999; pointer-events: none; width: 40px; height: 40px; }
@@ -46,9 +46,9 @@
     padding: 1.4rem 3rem; border-bottom: 1px solid var(--line);
     background: var(--nav-bg); backdrop-filter: blur(12px); transition: background 0.3s;
   }
-  .nav-logo { font-weight: 700; font-size: 0.95rem; letter-spacing: 0.04em; color: var(--accent2); }
+  .nav-logo { font-weight: 700; font-size: 1.075rem; letter-spacing: 0.04em; color: var(--accent2); }
   .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
-  .nav-links a { text-decoration: none; color: var(--muted); font-size: 0.75rem; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a { text-decoration: none; color: var(--muted); font-size: 0.875rem; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
   .nav-links a:hover { color: var(--text); }
   .theme-wrap { display: flex; align-items: center; }
   #theme-btn {
@@ -62,7 +62,7 @@
   /* ── COMMON ── */
   section { padding: 6rem 3rem; border-top: 1px solid var(--line); }
   .section-label {
-    font-size: 0.62rem; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase;
+    font-size: 0.745rem; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase;
     color: var(--accent); margin-bottom: 4rem; display: flex; align-items: center; gap: 1rem;
   }
   .section-label::after { content: ''; flex: 1; height: 1px; background: var(--line2); }
@@ -71,27 +71,27 @@
   .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 3rem 5rem; position: relative; overflow: hidden; }
   .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 80% 40%, rgba(200,184,154,0.04) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 20% 80%, rgba(140,120,90,0.06) 0%, transparent 60%); }
   .hero-grid { position: absolute; inset: 0; opacity: 0.03; background-image: linear-gradient(var(--text) 1px, transparent 1px), linear-gradient(90deg, var(--text) 1px, transparent 1px); background-size: 80px 80px; }
-  .hero-eyebrow { font-size: 0.68rem; font-weight: 400; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; }
+  .hero-eyebrow { font-size: 0.805rem; font-weight: 400; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.625rem; display: flex; align-items: center; gap: 1.125rem; }
   .hero-eyebrow::before { content: ''; width: 40px; height: 1px; background: var(--accent); }
-  .hero-name { font-weight: 700; font-size: clamp(3.5rem, 8vw, 7rem); line-height: 0.95; letter-spacing: -0.02em; color: var(--accent2); position: relative; margin-bottom: 2rem; }
-  .hero-name span { display: block; color: var(--muted); font-size: 0.38em; font-weight: 300; letter-spacing: 0.06em; margin-top: 1rem; }
-  .hero-desc { max-width: 560px; color: var(--muted); font-size: 0.88rem; font-weight: 300; line-height: 2; position: relative; margin-bottom: 3rem; }
-  .hero-meta { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 2.5rem; font-size: 0.75rem; font-weight: 300; color: var(--muted); letter-spacing: 0.06em; }
-  .hero-meta-div { color: var(--line2); } align-items: center; gap: 0.8rem; text-decoration: none; color: var(--text); font-size: 0.75rem; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; border-bottom: 1px solid var(--accent); padding-bottom: 0.3rem; transition: gap 0.3s, color 0.3s; }
+  .hero-name { font-weight: 700; font-size: clamp(3.75rem, 8vw, 7.25rem); line-height: 0.95; letter-spacing: -0.02em; color: var(--accent2); position: relative; margin-bottom: 2.125rem; }
+  .hero-name span { display: block; color: var(--muted); font-size: 0.38em; font-weight: 300; letter-spacing: 0.06em; margin-top: 1.125rem; }
+  .hero-desc { max-width: 560px; color: var(--muted); font-size: 1.005rem; font-weight: 400; line-height: 2; position: relative; margin-bottom: 3.125rem; }
+  .hero-meta { display: flex; align-items: center; gap: 0.725rem; margin-bottom: 2.625rem; font-size: 0.875rem; font-weight: 300; color: var(--muted); letter-spacing: 0.06em; }
+  .hero-meta-div { color: var(--line2); } align-items: center; gap: 0.925rem; text-decoration: none; color: var(--text); font-size: 0.875rem; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; border-bottom: 1px solid var(--accent); padding-bottom: 0.425rem; transition: gap 0.3s, color 0.3s; }
   .hero-cta:hover { gap: 1.4rem; color: var(--accent); }
-  .hero-index { position: absolute; right: 3rem; bottom: 5rem; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; writing-mode: vertical-rl; }
+  .hero-index { position: absolute; right: 3.125rem; bottom: 5.125rem; font-size: 0.775rem; color: var(--muted); letter-spacing: 0.1em; writing-mode: vertical-rl; }
 
   /* ── ABOUT ── */
   .about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 5rem; align-items: start; }
-  .about-title { font-weight: 700; font-size: clamp(1.8rem, 3.5vw, 2.8rem); line-height: 1.2; color: var(--accent2); margin-bottom: 2rem; }
-  .about-body { color: var(--muted); font-size: 0.88rem; font-weight: 300; line-height: 2.1; }
+  .about-title { font-weight: 700; font-size: clamp(2.05rem, 3.5vw, 3.05rem); line-height: 1.2; color: var(--accent2); margin-bottom: 2.125rem; }
+  .about-body { color: var(--muted); font-size: 1.025rem; font-weight: 400; line-height: 2.1; }
 
   /* ── SKILLS ── */
   .skills-block { display: flex; flex-direction: column; gap: 2.5rem; }
-  .skills-group-title { font-size: 0.62rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+  .skills-group-title { font-size: 0.745rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.125rem; }
   .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
   .skill-tag {
-    font-size: 0.75rem; font-weight: 400; padding: 0.35rem 0.85rem;
+    font-size: 0.875rem; font-weight: 400; padding: 0.475rem 0.975rem;
     border: 1px solid var(--line2); border-radius: 999px;
     color: var(--muted); letter-spacing: 0.04em; transition: border-color 0.2s, color 0.2s;
   }
@@ -99,44 +99,44 @@
 
   /* 업무성향 */
   .traits { display: flex; flex-direction: column; gap: 0; }
-  .trait-item { display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem 0; border-bottom: 1px solid var(--line); font-size: 0.82rem; color: var(--muted); }
+  .trait-item { display: flex; align-items: center; gap: 0.925rem; padding: 0.925rem 0; border-bottom: 1px solid var(--line); font-size: 0.965rem; font-weight: 400; color: var(--muted); }
   .trait-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
 
   /* ── GALLERY ── */
-  .gallery-intro { max-width: 500px; color: var(--muted); font-size: 0.88rem; font-weight: 300; margin-bottom: 3rem; }
+  .gallery-intro { max-width: 500px; color: var(--muted); font-size: 1.005rem; font-weight: 300; margin-bottom: 3.125rem; }
   .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); }
   .gallery-item { position: relative; overflow: hidden; background: var(--bg3); aspect-ratio: 4/3; }
   .gallery-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; }
   .gallery-icon { width: 28px; height: 28px; opacity: 0.15; }
-  .gallery-tag { font-size: 0.62rem; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); opacity: 0; transition: opacity 0.3s; }
+  .gallery-tag { font-size: 0.745rem; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); opacity: 0; transition: opacity 0.3s; }
   .gallery-item:hover .gallery-tag { opacity: 1; }
   .gallery-overlay { position: absolute; inset: 0; background: rgba(10,10,10,0.72); display: flex; flex-direction: column; justify-content: flex-end; padding: 1.2rem; opacity: 0; transition: opacity 0.3s; }
   .gallery-item:hover .gallery-overlay { opacity: 1; }
-  .gallery-title { font-size: 0.8rem; font-weight: 500; color: var(--accent2); }
-  .gallery-sub { font-size: 0.68rem; font-weight: 300; color: var(--accent); margin-top: 0.2rem; }
-  .gallery-note { margin-top: 1.5rem; font-size: 0.72rem; font-weight: 300; color: var(--muted); font-style: italic; }
+  .gallery-title { font-size: 0.925rem; font-weight: 500; color: var(--accent2); }
+  .gallery-sub { font-size: 0.805rem; font-weight: 300; color: var(--accent); margin-top: 0.325rem; }
+  .gallery-note { margin-top: 1.625rem; font-size: 0.845rem; font-weight: 300; color: var(--muted); font-style: italic; }
 
   /* ── EXPERIENCE ── */
-  .exp-list { display: flex; flex-direction: column; }
-  .exp-item { display: grid; grid-template-columns: 160px 1fr; gap: 2.5rem; padding: 2.5rem 0; border-bottom: 1px solid var(--line); }
+  .exp-list { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--line); }
+  .exp-item { display: flex; flex-direction: column; gap: 1.2rem; padding: 2.5rem 2rem; background: var(--bg); }
   .exp-meta {}
-  .exp-period { font-size: 0.72rem; font-weight: 400; color: var(--accent); letter-spacing: 0.06em; margin-bottom: 0.4rem; }
-  .exp-company { font-size: 0.88rem; font-weight: 600; color: var(--accent2); margin-bottom: 0.2rem; }
-  .exp-role { font-size: 0.75rem; font-weight: 300; color: var(--muted); }
+  .exp-period { font-size: 0.845rem; font-weight: 500; color: var(--accent); letter-spacing: 0.06em; margin-bottom: 0.525rem; }
+  .exp-company { font-size: 1.005rem; font-weight: 600; color: var(--accent2); margin-bottom: 0.325rem; }
+  .exp-role { font-size: 0.875rem; font-weight: 400; color: var(--muted); }
   .exp-body {}
-  .exp-title { font-size: 0.88rem; font-weight: 500; color: var(--text); margin-bottom: 0.8rem; }
-  .exp-desc { font-size: 0.82rem; font-weight: 300; color: var(--muted); line-height: 1.9; }
+  .exp-title { font-size: 1.005rem; font-weight: 500; color: var(--text); margin-bottom: 0.925rem; }
+  .exp-desc { font-size: 0.975rem; font-weight: 400; color: var(--muted); line-height: 1.9; }
   .exp-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
-  .exp-tag { font-size: 0.68rem; padding: 0.2rem 0.6rem; border: 1px solid var(--line2); border-radius: 4px; color: var(--muted); }
+  .exp-tag { font-size: 0.805rem; padding: 0.325rem 0.725rem; border: 1px solid var(--line2); border-radius: 4px; color: var(--muted); }
 
   /* ── INFO (학력 + 자격증) ── */
   .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
-  .info-block-title { font-size: 0.62rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; }
+  .info-block-title { font-size: 0.745rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.625rem; }
   .info-list { display: flex; flex-direction: column; }
   .info-item { padding: 1rem 0; border-bottom: 1px solid var(--line); display: grid; grid-template-rows: auto auto auto; }
-  .info-date { font-size: 0.68rem; color: var(--accent); letter-spacing: 0.06em; margin-bottom: 0.3rem; }
-  .info-name { font-size: 0.82rem; font-weight: 500; color: var(--text); margin-bottom: 0.2rem; }
-  .info-sub { font-size: 0.72rem; font-weight: 300; color: var(--muted); line-height: 1.6; }
+  .info-date { font-size: 0.805rem; color: var(--accent); letter-spacing: 0.06em; margin-bottom: 0.425rem; }
+  .info-name { font-size: 0.945rem; font-weight: 500; color: var(--text); margin-bottom: 0.325rem; }
+  .info-sub { font-size: 0.845rem; font-weight: 400; color: var(--muted); line-height: 1.6; }
 
   /* ── CONTACT (하단 4칸) ── */
   .contact-grid-bottom { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); margin-top: 5rem; border-top: 1px solid var(--line); }
@@ -149,16 +149,17 @@
   .contact-card:hover { background: var(--bg3); }
   .contact-card-icon { color: var(--accent); margin-bottom: 0.4rem; }
   .contact-card-icon svg { width: 18px; height: 18px; }
-  .contact-card-label { font-size: 0.62rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
-  .contact-card-value { font-size: 0.82rem; font-weight: 300; color: var(--muted); word-break: break-all; }
-  .contact-card-hint { font-size: 0.68rem; font-weight: 400; color: var(--accent); margin-top: 0.6rem; }
+  .contact-card-label { font-size: 0.745rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
+  .contact-card-value { font-size: 0.945rem; font-weight: 400; color: var(--muted); word-break: break-all; }
+  .contact-card-hint { font-size: 0.805rem; font-weight: 400; color: var(--accent); margin-top: 0.725rem; }
   .contact-card { min-height: 120px; }
 
-  footer { padding: 2rem 3rem; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; font-size: 0.68rem; font-weight: 300; color: var(--muted); letter-spacing: 0.06em; }
+  footer { padding: 2.125rem 3.125rem; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; font-size: 0.805rem; font-weight: 300; color: var(--muted); letter-spacing: 0.06em; }
 
   @media (max-width: 900px) {
     .about-grid { grid-template-columns: 1fr; gap: 3rem; }
     .info-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .exp-list { grid-template-columns: 1fr; }
     .contact-grid-bottom { grid-template-columns: repeat(3, 1fr); }
   }
   @media (max-width: 640px) {
@@ -414,12 +415,12 @@
       <div class="contact-card-label">Phone</div>
       <div class="contact-card-value">010-4890-8913</div>
     </div>
-    <a class="contact-card" href="/cdn-cgi/l/email-protection#27444f46424252494d1f1e161467404a464e4b0944484a">
+    <a class="contact-card" href="mailto:chaeeunj8913@gmail.com">
       <div class="contact-card-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
       </div>
       <div class="contact-card-label">Email</div>
-      <div class="contact-card-value"><span class="__cf_email__" data-cfemail="caa9a2abafafbfa4a0f2f3fbf98aada7aba3a6e4a9a5a7">[email&#160;protected]</span></div>
+      <div class="contact-card-value">chaeeunj8913&#64;gmail.com</div>
       <div class="contact-card-hint">메일 보내기 →</div>
     </a>
     <a class="contact-card" href="https://discord.com/users/dasa0" target="_blank">
