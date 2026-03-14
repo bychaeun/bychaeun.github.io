@@ -1,12 +1,606 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>채은 포트폴리오</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>정채은 — 3D 배경 모델러</title>
+<link href="https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/variable/woff2/SUIT-Variable.css" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  * { cursor: none !important; }
+
+  :root {
+    --bg: #0a0a0a; --bg2: #111; --bg3: #1a1a1a;
+    --line: rgba(255,255,255,0.08); --line2: rgba(255,255,255,0.15);
+    --text: #f0ede8; --muted: #888882; --accent: #c8b89a; --accent2: #e8ddd0;
+    --nav-bg: rgba(10,10,10,0.88);
+    --font: 'SUIT Variable', 'SUIT', sans-serif;
+  }
+  body.light {
+    --bg: #f5f2ee; --bg2: #edeae5; --bg3: #e4e0da;
+    --line: rgba(0,0,0,0.08); --line2: rgba(0,0,0,0.13);
+    --text: #1a1714; --muted: #7a7570; --accent: #8a6a3a; --accent2: #3a2a10;
+    --nav-bg: rgba(245,242,238,0.9);
+  }
+
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); font-weight: 300; line-height: 1.7; min-height: 100vh; transition: background 0.3s, color 0.3s; }
+
+  /* ── WAND ── */
+  #wand { position: fixed; z-index: 99999; pointer-events: none; width: 40px; height: 40px; }
+
+  .hp {
+    position: fixed; pointer-events: none; z-index: 99998;
+    animation: hpFade var(--dur) var(--dly) ease-out forwards;
+  }
+  @keyframes hpFade {
+    0%   { opacity: 1;    transform: translate(0,0)                   scale(1)   rotate(0deg); }
+    60%  { opacity: 0.85; transform: translate(var(--tx),var(--ty60)) scale(0.8) rotate(var(--rot)); }
+    100% { opacity: 0;    transform: translate(var(--tx),var(--ty))   scale(0)   rotate(var(--rot)); }
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.4rem 3rem; border-bottom: 1px solid var(--line);
+    background: var(--nav-bg); backdrop-filter: blur(12px); transition: background 0.3s;
+  }
+  .nav-logo { font-weight: 700; font-size: 0.95rem; letter-spacing: 0.04em; color: var(--accent2); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+  .nav-links a { text-decoration: none; color: var(--muted); font-size: 0.75rem; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+  .theme-wrap { display: flex; align-items: center; }
+  #theme-btn {
+    width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line2);
+    background: transparent; display: flex; align-items: center; justify-content: center;
+    cursor: none; transition: border-color 0.2s, background 0.2s; padding: 0;
+  }
+  #theme-btn:hover { background: var(--line); }
+  #theme-btn svg { width: 15px; height: 15px; color: var(--text); }
+
+  /* ── COMMON ── */
+  section { padding: 6rem 3rem; border-top: 1px solid var(--line); }
+  .section-label {
+    font-size: 0.62rem; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 4rem; display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--line2); }
+
+  /* ── HERO ── */
+  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 3rem 5rem; position: relative; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 80% 40%, rgba(200,184,154,0.04) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 20% 80%, rgba(140,120,90,0.06) 0%, transparent 60%); }
+  .hero-grid { position: absolute; inset: 0; opacity: 0.03; background-image: linear-gradient(var(--text) 1px, transparent 1px), linear-gradient(90deg, var(--text) 1px, transparent 1px); background-size: 80px 80px; }
+  .hero-eyebrow { font-size: 0.68rem; font-weight: 400; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; }
+  .hero-eyebrow::before { content: ''; width: 40px; height: 1px; background: var(--accent); }
+  .hero-name { font-weight: 700; font-size: clamp(3.5rem, 8vw, 7rem); line-height: 0.95; letter-spacing: -0.02em; color: var(--accent2); position: relative; margin-bottom: 2rem; }
+  .hero-name span { display: block; color: var(--muted); font-size: 0.38em; font-weight: 300; letter-spacing: 0.06em; margin-top: 1rem; }
+  .hero-desc { max-width: 560px; color: var(--muted); font-size: 0.88rem; font-weight: 300; line-height: 2; position: relative; margin-bottom: 3rem; }
+  .hero-meta { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 2.5rem; font-size: 0.75rem; font-weight: 300; color: var(--muted); letter-spacing: 0.06em; }
+  .hero-meta-div { color: var(--line2); } align-items: center; gap: 0.8rem; text-decoration: none; color: var(--text); font-size: 0.75rem; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; border-bottom: 1px solid var(--accent); padding-bottom: 0.3rem; transition: gap 0.3s, color 0.3s; }
+  .hero-cta:hover { gap: 1.4rem; color: var(--accent); }
+
+  /* ── HERO CHARACTER ── */
+  .hero-char {
+    position: absolute;
+    right: 5rem; bottom: 3rem;
+    width: 130px; opacity: 0.88;
+    animation: charFloat 3.8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+  @keyframes charFloat {
+    0%   { transform: translateY(0px) rotate(-2deg); }
+    30%  { transform: translateY(-10px) rotate(1deg); }
+    60%  { transform: translateY(-5px) rotate(-1deg); }
+    100% { transform: translateY(0px) rotate(-2deg); }
+  }
+  @media (max-width: 640px) { .hero-char { width: 80px; right: 1rem; bottom: 5rem; } }
+  .hero-index { position: absolute; right: 3rem; bottom: 5rem; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; writing-mode: vertical-rl; }
+
+  /* ── ABOUT ── */
+  .about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 5rem; align-items: start; }
+  .about-title { font-weight: 700; font-size: clamp(1.8rem, 3.5vw, 2.8rem); line-height: 1.2; color: var(--accent2); margin-bottom: 2rem; }
+  .about-body { color: var(--muted); font-size: 0.88rem; font-weight: 300; line-height: 2.1; }
+
+  /* ── SKILLS ── */
+  .skills-block { display: flex; flex-direction: column; gap: 2.5rem; }
+  .skills-group-title { font-size: 0.62rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .skill-tag {
+    font-size: 0.75rem; font-weight: 400; padding: 0.35rem 0.85rem;
+    border: 1px solid var(--line2); border-radius: 999px;
+    color: var(--muted); letter-spacing: 0.04em; transition: border-color 0.2s, color 0.2s;
+  }
+  .skill-tag:hover { border-color: var(--accent); color: var(--accent2); }
+
+  /* 업무성향 */
+  .traits { display: flex; flex-direction: column; gap: 0; }
+  .trait-item { display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem 0; border-bottom: 1px solid var(--line); font-size: 0.82rem; color: var(--muted); }
+  .trait-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+  /* ── GALLERY ── */
+  .gallery-intro { max-width: 500px; color: var(--muted); font-size: 0.88rem; font-weight: 300; margin-bottom: 3rem; }
+  .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); }
+  .gallery-item { position: relative; overflow: hidden; background: var(--bg3); aspect-ratio: 4/3; }
+  .gallery-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; }
+  .gallery-icon { width: 28px; height: 28px; opacity: 0.15; }
+  .gallery-tag { font-size: 0.62rem; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); opacity: 0; transition: opacity 0.3s; }
+  .gallery-item:hover .gallery-tag { opacity: 1; }
+  .gallery-overlay { position: absolute; inset: 0; background: rgba(10,10,10,0.72); display: flex; flex-direction: column; justify-content: flex-end; padding: 1.2rem; opacity: 0; transition: opacity 0.3s; }
+  .gallery-item:hover .gallery-overlay { opacity: 1; }
+  .gallery-title { font-size: 0.8rem; font-weight: 500; color: var(--accent2); }
+  .gallery-sub { font-size: 0.68rem; font-weight: 300; color: var(--accent); margin-top: 0.2rem; }
+  .gallery-note { margin-top: 1.5rem; font-size: 0.72rem; font-weight: 300; color: var(--muted); font-style: italic; }
+
+  /* ── EXPERIENCE ── */
+  .exp-list { display: flex; flex-direction: column; }
+  .exp-item { display: grid; grid-template-columns: 160px 1fr; gap: 2.5rem; padding: 2.5rem 0; border-bottom: 1px solid var(--line); }
+  .exp-meta {}
+  .exp-period { font-size: 0.72rem; font-weight: 400; color: var(--accent); letter-spacing: 0.06em; margin-bottom: 0.4rem; }
+  .exp-company { font-size: 0.88rem; font-weight: 600; color: var(--accent2); margin-bottom: 0.2rem; }
+  .exp-role { font-size: 0.75rem; font-weight: 300; color: var(--muted); }
+  .exp-body {}
+  .exp-title { font-size: 0.88rem; font-weight: 500; color: var(--text); margin-bottom: 0.8rem; }
+  .exp-desc { font-size: 0.82rem; font-weight: 300; color: var(--muted); line-height: 1.9; }
+  .exp-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
+  .exp-tag { font-size: 0.68rem; padding: 0.2rem 0.6rem; border: 1px solid var(--line2); border-radius: 4px; color: var(--muted); }
+
+  /* ── INFO (학력 + 자격증) ── */
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+  .info-block-title { font-size: 0.62rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; }
+  .info-list { display: flex; flex-direction: column; }
+  .info-item { padding: 1rem 0; border-bottom: 1px solid var(--line); display: grid; grid-template-rows: auto auto auto; }
+  .info-date { font-size: 0.68rem; color: var(--accent); letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+  .info-name { font-size: 0.82rem; font-weight: 500; color: var(--text); margin-bottom: 0.2rem; }
+  .info-sub { font-size: 0.72rem; font-weight: 300; color: var(--muted); line-height: 1.6; }
+
+  /* ── CONTACT (하단 4칸) ── */
+  .contact-grid-bottom { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); margin-top: 5rem; border-top: 1px solid var(--line); }
+  .contact-card {
+    background: var(--bg); padding: 2rem 1.8rem;
+    display: flex; flex-direction: column; gap: 0.6rem;
+    text-decoration: none; color: var(--text);
+    transition: background 0.2s;
+  }
+  .contact-card:hover { background: var(--bg3); }
+  .contact-card-icon { color: var(--accent); margin-bottom: 0.4rem; }
+  .contact-card-icon svg { width: 18px; height: 18px; }
+  .contact-card-label { font-size: 0.62rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
+  .contact-card-value { font-size: 0.82rem; font-weight: 300; color: var(--muted); word-break: break-all; }
+  .contact-card-hint { font-size: 0.68rem; font-weight: 400; color: var(--accent); margin-top: 0.6rem; }
+  .contact-card { min-height: 120px; }
+
+  footer { padding: 2rem 3rem; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; font-size: 0.68rem; font-weight: 300; color: var(--muted); letter-spacing: 0.06em; }
+
+  @media (max-width: 900px) {
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .info-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .contact-grid-bottom { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 640px) {
+    nav { padding: 1.2rem 1.5rem; } .nav-links { gap: 1.2rem; }
+    section { padding: 4rem 1.5rem; }
+    .hero { padding: 0 1.5rem 4rem; }
+    .info-grid { grid-template-columns: 1fr; }
+    .contact-grid-bottom { grid-template-columns: repeat(2, 1fr); }
+    footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+  
+  /* ── HERO CHARACTER ── */
+  .hero-char {
+    position: absolute;
+    right: 5rem; bottom: 3rem;
+    width: 130px; opacity: 0.88;
+    animation: charFloat 3.8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+  @keyframes charFloat {
+    0%   { transform: translateY(0px) rotate(-2deg); }
+    30%  { transform: translateY(-10px) rotate(1deg); }
+    60%  { transform: translateY(-5px) rotate(-1deg); }
+    100% { transform: translateY(0px) rotate(-2deg); }
+  }
+  @media (max-width: 640px) { .hero-char { width: 80px; right: 1rem; bottom: 5rem; } }
+  .hero-index { display: none; }
+    .exp-item { grid-template-columns: 1fr; gap: 0.8rem; }
+  }
+</style>
 </head>
 <body>
-  <h1>안녕하세요, 채은입니다.</h1>
-  <p>이곳은 제 포트폴리오 사이트입니다.</p>
-</body>
-</html>
+
+<!-- WAND -->
+<svg id="wand" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <line x1="47" y1="47" x2="27" y2="27" stroke="#2a0040" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="47" y1="47" x2="27" y2="27" stroke="#a855f7" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="46.2" y1="45.5" x2="28" y2="27.5" stroke="#d8b4fe" stroke-width="0.8" stroke-linecap="round" opacity="0.7"/>
+  <circle cx="48" cy="48" r="3.2" fill="#e9d5ff" stroke="#2a0040" stroke-width="1.2"/>
+  <circle cx="48" cy="48" r="1.5" fill="white" opacity="0.6"/>
+  <g transform="translate(19,19) rotate(-45)">
+    <path d="M0,5 C0,2 -3,0 -6,0 C-9,0 -11,2.5 -11,5.5 C-11,10 0,16 0,16 C0,16 11,10 11,5.5 C11,2.5 9,0 6,0 C3,0 0,2 0,5 Z" fill="#1a0020"/>
+    <path d="M0,4.5 C0,1.8 -2.8,0 -5.5,0 C-8.2,0 -10,2.2 -10,5 C-10,9.5 0,15 0,15 C0,15 10,9.5 10,5 C10,2.2 8.2,0 5.5,0 C2.8,0 0,1.8 0,4.5 Z" fill="#fb7185"/>
+    <path d="M-5,1 C-7,1.5 -8.5,3.5 -8,5.5" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>
+    <circle cx="-3.5" cy="2.5" r="1.2" fill="white" opacity="0.45"/>
+  </g>
+  <path d="M7,11 L7.9,13.8 L10.8,14.6 L7.9,15.4 L7,18.2 L6.1,15.4 L3.2,14.6 L6.1,13.8Z" fill="#fbbf24" stroke="#78350f" stroke-width="0.4"/>
+  <path d="M38,5 L38.7,7.2 L41,7.9 L38.7,8.6 L38,10.8 L37.3,8.6 L35,7.9 L37.3,7.2Z" fill="#fbbf24" stroke="#78350f" stroke-width="0.4"/>
+  <circle cx="5"  cy="23" r="1.8" fill="#c084e8" stroke="#3b0764" stroke-width="0.7"/>
+  <circle cx="14" cy="5"  r="1.3" fill="#c084e8" stroke="#3b0764" stroke-width="0.6"/>
+  <circle cx="36" cy="34" r="1.3" fill="#f9a8d4" stroke="#831843" stroke-width="0.6"/>
+</svg>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">정채은</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#works">Works</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#info">Info</a></li>
+    <li>
+      <div class="theme-wrap">
+        <button id="theme-btn" aria-label="테마 전환">
+          <svg id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <circle cx="12" cy="12" r="4"/>
+            <line x1="12" y1="2"  x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/>
+            <line x1="2"  y1="12" x2="4"  y2="12"/><line x1="20" y1="12" x2="22" y2="12"/>
+            <line x1="4.9" y1="4.9" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.1" y2="19.1"/>
+            <line x1="4.9" y1="19.1" x2="6.3" y2="17.7"/><line x1="17.7" y1="6.3" x2="19.1" y2="4.9"/>
+          </svg>
+          <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="display:none">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/>
+          </svg>
+        </button>
+      </div>
+    </li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-eyebrow">3D Background Modeler</div>
+  <h1 class="hero-name">
+    정채은
+    <span>3D Environment Artist</span>
+  </h1>
+  <p class="hero-desc">
+    플레이어가 공간에 들어섰을 때 '어? 여긴 어디지?'라는 호기심을 만들고<br>
+    기대감을 전하고 싶은 3D 배경 모델러입니다.<br>
+    배경을 단순히 프랍을 나열하는 공간이 아닌,<br>
+    조화와 흐름이 살아 있는 하나의 씬으로 바라봅니다.
+  </p>
+  <div class="hero-meta">
+    <span>1997. 02. 16</span>
+    <span class="hero-meta-div">·</span>
+    <span>거제 출생</span>
+  </div>
+  <a class="hero-cta" href="#works">View Works →</a>
+  <div class="hero-index">Portfolio 2025</div>
+  <div class="hero-char">
+    <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- 귀 왼쪽 -->
+      <path d="M62 28 C58 10 48 5 44 18 L52 45 Z" fill="#ffb3d1" stroke="#ff6ba8" stroke-width="3" stroke-linejoin="round"/>
+      <!-- 귀 오른쪽 -->
+      <path d="M138 28 C142 10 152 5 156 18 L148 45 Z" fill="#ffb3d1" stroke="#ff6ba8" stroke-width="3" stroke-linejoin="round"/>
+      <!-- 머리 -->
+      <ellipse cx="100" cy="72" rx="52" ry="48" fill="#ffd6e8" stroke="#ff6ba8" stroke-width="3.5"/>
+      <!-- 얼굴 마스크 (어두운 부분) -->
+      <ellipse cx="100" cy="78" rx="36" ry="32" fill="#ff8fb8" stroke="#ff6ba8" stroke-width="2"/>
+      <!-- 눈 왼쪽 -->
+      <circle cx="86" cy="70" r="5" fill="#1a0020"/>
+      <circle cx="88" cy="68" r="1.5" fill="white" opacity="0.7"/>
+      <!-- 눈 오른쪽 -->
+      <circle cx="114" cy="70" r="5" fill="#1a0020"/>
+      <circle cx="116" cy="68" r="1.5" fill="white" opacity="0.7"/>
+      <!-- 코 -->
+      <ellipse cx="100" cy="80" rx="4" ry="2.5" fill="#1a0020"/>
+      <!-- 입 -->
+      <path d="M92 88 Q100 94 108 88" stroke="#1a0020" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <!-- 몸통 -->
+      <path d="M60 110 Q55 160 58 200 Q80 210 100 210 Q120 210 142 200 Q145 160 140 110 Q120 100 100 100 Q80 100 60 110Z" fill="#ffd6e8" stroke="#ff6ba8" stroke-width="3.5" stroke-linejoin="round"/>
+      <!-- 배 밝은 부분 -->
+      <ellipse cx="100" cy="158" rx="26" ry="34" fill="#ffe8f2" stroke="#ffb3d1" stroke-width="1.5"/>
+
+      <!-- 왼쪽 팔 (하트 마법봉 들고있음) -->
+      <path d="M60 118 Q38 112 22 100" stroke="#ff6ba8" stroke-width="14" stroke-linecap="round"/>
+      <path d="M60 118 Q38 112 22 100" stroke="#ffd6e8" stroke-width="10" stroke-linecap="round"/>
+
+      <!-- 하트 마법봉 (왼손) -->
+      <!-- 봉 -->
+      <line x1="22" y1="100" x2="6" y2="68" stroke="#9b59c2" stroke-width="4" stroke-linecap="round"/>
+      <line x1="22" y1="100" x2="6" y2="68" stroke="#d8b4fe" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+      <!-- 봉 손잡이 -->
+      <circle cx="23" cy="102" r="4" fill="#e9d5ff" stroke="#7c3aed" stroke-width="1.5"/>
+      <!-- 봉 끝 하트 (45도 기울어짐) -->
+      <g transform="translate(6,68) rotate(-45)">
+        <path d="M0,4 C0,1.5 -2.5,0 -4.8,0 C-7.2,0 -8.8,2 -8.8,4.4 C-8.8,8.5 0,13.5 0,13.5 C0,13.5 8.8,8.5 8.8,4.4 C8.8,2 7.2,0 4.8,0 C2.5,0 0,1.5 0,4Z" fill="#1a0020"/>
+        <path d="M0,3.8 C0,1.5 -2.3,0 -4.5,0 C-6.8,0 -8.3,1.8 -8.3,4.2 C-8.3,8 0,12.8 0,12.8 C0,12.8 8.3,8 8.3,4.2 C8.3,1.8 6.8,0 4.5,0 C2.3,0 0,1.5 0,3.8Z" fill="#fb7185"/>
+        <circle cx="-3" cy="2.2" r="1.5" fill="white" opacity="0.4"/>
+      </g>
+      <!-- 봉 주변 반짝이 -->
+      <path d="M-2,50 L-1,53 L2,54 L-1,55 L-2,58 L-3,55 L-6,54 L-3,53Z" fill="#fbbf24" stroke="#92400e" stroke-width="0.4"/>
+      <path d="M18,44 L18.7,46.5 L21,47.2 L18.7,47.9 L18,50.4 L17.3,47.9 L15,47.2 L17.3,46.5Z" fill="#fbbf24" stroke="#92400e" stroke-width="0.4"/>
+
+      <!-- 오른쪽 팔 (들어올림) -->
+      <path d="M140 118 Q162 108 176 92" stroke="#ff6ba8" stroke-width="14" stroke-linecap="round"/>
+      <path d="M140 118 Q162 108 176 92" stroke="#ffd6e8" stroke-width="10" stroke-linecap="round"/>
+
+      <!-- 다리 왼쪽 -->
+      <path d="M78 200 Q74 218 72 228" stroke="#ff6ba8" stroke-width="13" stroke-linecap="round"/>
+      <path d="M78 200 Q74 218 72 228" stroke="#ffd6e8" stroke-width="9" stroke-linecap="round"/>
+      <!-- 발 왼쪽 -->
+      <ellipse cx="70" cy="230" rx="14" ry="7" fill="#ffd6e8" stroke="#ff6ba8" stroke-width="3"/>
+
+      <!-- 다리 오른쪽 -->
+      <path d="M122 200 Q126 218 128 228" stroke="#ff6ba8" stroke-width="13" stroke-linecap="round"/>
+      <path d="M122 200 Q126 218 128 228" stroke="#ffd6e8" stroke-width="9" stroke-linecap="round"/>
+      <!-- 발 오른쪽 -->
+      <ellipse cx="130" cy="230" rx="14" ry="7" fill="#ffd6e8" stroke="#ff6ba8" stroke-width="3"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">01 — About</div>
+  <div class="about-grid">
+    <div>
+      <h2 class="about-title">공간이 플레이어의<br>발걸음을 멈추게 하는<br>순간을 만듭니다</h2>
+      <div class="about-body">
+        <p>프로덕트 디자인을 전공하며 오브젝트의 기능성과 형태를 다양하게 고민해왔고, 인테리어 디자인 경험을 통해 공간을 구성하는 감각과 시선의 흐름에 대한 이해도를 넓혔습니다.</p>
+        <br>
+        <p>이러한 경험을 통해 저는 배경을 단순히 프랍을 나열하는 공간이 아닌, 조화와 흐름이 살아 있는 하나의 씬으로 바라보게 되었습니다. 전체 씬을 상상하며 각 프랍을 퍼즐 조각처럼 맞춰가며 배경을 완성해 나갑니다.</p>
+        <br>
+        <p>그 공간이 플레이어의 발걸음을 멈추게 하고, 마음에 남는 장면이 되길 바랍니다.</p>
+      </div>
+    </div>
+    <div class="skills-block">
+      <!-- 사용 툴 -->
+      <div>
+        <div class="skills-group-title">Tools</div>
+        <div class="skill-tags">
+          <span class="skill-tag">3Ds Max</span>
+          <span class="skill-tag">Unreal Engine 5</span>
+          <span class="skill-tag">Substance Painter</span>
+          <span class="skill-tag">Substance Designer</span>
+          <span class="skill-tag">Photoshop</span>
+          <span class="skill-tag">Illustrator</span>
+          <span class="skill-tag">ZBrush</span>
+        </div>
+      </div>
+      <!-- 업무 성향 -->
+      <div>
+        <div class="skills-group-title">Work Style</div>
+        <div class="traits">
+          <div class="trait-item"><div class="trait-dot"></div>팀워크를 중시하는 태도</div>
+          <div class="trait-item"><div class="trait-dot"></div>소통하고 피드백을 반영하는 자세</div>
+          <div class="trait-item"><div class="trait-dot"></div>차분한 실행력</div>
+          <div class="trait-item"><div class="trait-dot"></div>새로운 환경에 대한 적응력</div>
+          <div class="trait-item"><div class="trait-dot"></div>사용자 관점의 고민</div>
+          <div class="trait-item"><div class="trait-dot"></div>기술의 기본기 연습</div>
+          <div class="trait-item"><div class="trait-dot"></div>묵묵한 서포터 성향</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKS -->
+<section id="works">
+  <div class="section-label">02 — Works</div>
+  <p class="gallery-intro">게임 환경 배경 모델링 작업물입니다. 각 프로젝트는 실제 게임 파이프라인에 맞춰 최적화되었습니다.</p>
+  <div class="gallery-grid">
+    <div class="gallery-item"><div class="gallery-placeholder"><svg class="gallery-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 21V9"/></svg><span class="gallery-tag">이미지 추가</span></div><div class="gallery-overlay"><div class="gallery-title">작업물 제목</div><div class="gallery-sub">UE5 · Environment</div></div></div>
+    <div class="gallery-item"><div class="gallery-placeholder"><svg class="gallery-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 21V9"/></svg><span class="gallery-tag">이미지 추가</span></div><div class="gallery-overlay"><div class="gallery-title">작업물 제목</div><div class="gallery-sub">3Ds Max · Tileset</div></div></div>
+    <div class="gallery-item"><div class="gallery-placeholder"><svg class="gallery-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 21V9"/></svg><span class="gallery-tag">이미지 추가</span></div><div class="gallery-overlay"><div class="gallery-title">작업물 제목</div><div class="gallery-sub">UE5 · Modular Set</div></div></div>
+    <div class="gallery-item"><div class="gallery-placeholder"><svg class="gallery-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 21V9"/></svg><span class="gallery-tag">이미지 추가</span></div><div class="gallery-overlay"><div class="gallery-title">작업물 제목</div><div class="gallery-sub">Substance · Prop</div></div></div>
+    <div class="gallery-item"><div class="gallery-placeholder"><svg class="gallery-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 21V9"/></svg><span class="gallery-tag">이미지 추가</span></div><div class="gallery-overlay"><div class="gallery-title">작업물 제목</div><div class="gallery-sub">UE5 · Nature</div></div></div>
+    <div class="gallery-item"><div class="gallery-placeholder"><svg class="gallery-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 21V9"/></svg><span class="gallery-tag">이미지 추가</span></div><div class="gallery-overlay"><div class="gallery-title">작업물 제목</div><div class="gallery-sub">3Ds Max · Environment</div></div></div>
+  </div>
+  <p class="gallery-note">* 실제 작업물 이미지로 교체해주세요.</p>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">03 — Experience</div>
+  <div class="exp-list">
+
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div class="exp-period">2024.07 — 2025.11</div>
+        <div class="exp-company">(주)아이어스</div>
+        <div class="exp-role">콘텐츠 개발팀 주임</div>
+      </div>
+      <div class="exp-body">
+        <div class="exp-title">3D배경 에셋 제작 · UI디자인 · 기획 보조 · 레벨연출</div>
+        <div class="exp-desc">
+          문화유산 콘텐츠, 공공디자인, 교육 체험 콘텐츠 등 다양한 프로젝트에 참여했습니다. Unity 기반 VR 게임, 키오스크 UI, 인터랙티브 콘텐츠 등 디지털 환경에 맞춘 콘텐츠를 제작했으며 3D 오브젝트 제작, UI 디자인, CSV 기반 데이터 시각화 작업을 담당했습니다. 현장 검수를 통해 품질을 개선하는 한편 외부 개발자와의 커뮤니케이션도 주도적으로 진행했습니다. 기획부터 구현까지 전 과정을 실무 중심으로 경험했습니다.
+        </div>
+        <div class="exp-tags">
+          <span class="exp-tag">Unity</span>
+          <span class="exp-tag">3D Modeling</span>
+          <span class="exp-tag">UI Design</span>
+          <span class="exp-tag">Level Design</span>
+          <span class="exp-tag">기획 보조</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div class="exp-period">2021.12 — 2023.01</div>
+        <div class="exp-company">몬스타 미디어</div>
+        <div class="exp-role">콘텐츠제작팀 사원</div>
+      </div>
+      <div class="exp-body">
+        <div class="exp-title">전반적인 2D 그래픽 업무</div>
+        <div class="exp-desc">
+          방송, 광고, 공공기관 콘텐츠 등 다양한 제작 업무를 담당했습니다. 방송용 타이틀, 자막, CG, 오프닝 시퀀스 등 영상 그래픽 디자인을 주도적으로 맡았으며, 광고 촬영 기획과 인테리어 설계, 3D 모델링 등 공간 관련 작업으로 역할을 확장했습니다. 유아 애니메이션, 스포츠 콘텐츠, 인포그래픽 영상 등 다양한 장르의 콘텐츠를 제작하며 디자인 톤앤매너와 품질 관리 감각을 키웠습니다.
+        </div>
+        <div class="exp-tags">
+          <span class="exp-tag">2D Graphic</span>
+          <span class="exp-tag">PPT 제안서</span>
+          <span class="exp-tag">Illustrator</span>
+          <span class="exp-tag">Photoshop</span>
+          <span class="exp-tag">3D Modeling</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- INFO: 학력 + 자격증 -->
+<section id="info">
+  <div class="section-label">04 — Info</div>
+  <div class="info-grid">
+
+    <!-- 학력 -->
+    <div>
+      <div class="info-block-title">
+        <svg style="display:inline-block;vertical-align:middle;margin-right:6px;margin-bottom:2px" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 2 6 3 6 3s6-1 6-3v-5"/></svg>
+        Education
+      </div>
+      <div class="info-list">
+        <div class="info-item">
+          <div class="info-date">2015.03 — 2020.02</div>
+          <div class="info-name">홍익대학교</div>
+          <div class="info-sub">프로덕트 디자인 졸업</div>
+          <div class="info-sub">섬유미술·패션디자인 부전공</div>
+        </div>
+        <div class="info-item">
+          <div class="info-date">2012.03 — 2014.12</div>
+          <div class="info-name">거제중앙고등학교</div>
+          <div class="info-sub">졸업 · 문과</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 자격증 -->
+    <div>
+      <div class="info-block-title">
+        <svg style="display:inline-block;vertical-align:middle;margin-right:6px;margin-bottom:2px" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/><path d="M15 6.5V6a3 3 0 0 0-6 0v.5"/></svg>
+        Certificates
+      </div>
+      <div class="info-list">
+        <div class="info-item">
+          <div class="info-date">2020.09</div>
+          <div class="info-name">컬러리스트 기사</div>
+          <div class="info-sub">한국산업인력공단</div>
+        </div>
+        <div class="info-item">
+          <div class="info-date">2020.07</div>
+          <div class="info-name">전산응용건축제도기능사</div>
+          <div class="info-sub">한국산업인력공단</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Contact 3칸 -->
+  <div class="contact-grid-bottom">
+    <div class="contact-card">
+      <div class="contact-card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+      </div>
+      <div class="contact-card-label">Phone</div>
+      <div class="contact-card-value">010-4890-8913</div>
+    </div>
+    <a class="contact-card" href="mailto:chaeeunj8913@gmail.com">
+      <div class="contact-card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+      </div>
+      <div class="contact-card-label">Email</div>
+      <div class="contact-card-value">chaeeunj8913@gmail.com</div>
+      <div class="contact-card-hint">메일 보내기 →</div>
+    </a>
+    <a class="contact-card" href="https://discord.com/users/dasa0" target="_blank">
+      <div class="contact-card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M20.317 4.37a19.8 19.8 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.054a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+      </div>
+      <div class="contact-card-label">Discord</div>
+      <div class="contact-card-value">dasa0</div>
+      <div class="contact-card-hint">친구 추가 →</div>
+    </a>
+  </div>
+
+</section>
+
+<footer>
+  <span>© 2025 정채은 — 3D Background Modeler</span>
+  <span>Built with passion 🩷</span>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  const wand = document.getElementById('wand');
+  const COLORS = ['#ff8fab','#ffb3c6','#f472b6','#ffc8dd','#ff6b9d','#fda4af','#e879a0','#ffccd5'];
+  let lastX = -999, lastY = -999;
+
+  function makeHeartSVG(size, color) {
+    const ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('width', size); svg.setAttribute('height', size);
+    svg.setAttribute('viewBox', '-12 -2 24 20');
+    const path = document.createElementNS(ns, 'path');
+    path.setAttribute('d','M0,4.5 C0,1.8 -2.8,0 -5.5,0 C-8.2,0 -10,2.2 -10,5 C-10,9.5 0,16 0,16 C0,16 10,9.5 10,5 C10,2.2 8.2,0 5.5,0 C2.8,0 0,1.8 0,4.5 Z');
+    path.setAttribute('fill', color);
+    path.setAttribute('stroke','#9d174d'); path.setAttribute('stroke-width','0.6');
+    svg.appendChild(path);
+    const hl = document.createElementNS(ns, 'circle');
+    hl.setAttribute('cx','-4'); hl.setAttribute('cy','3'); hl.setAttribute('r','1.8');
+    hl.setAttribute('fill','white'); hl.setAttribute('opacity','0.4');
+    svg.appendChild(hl);
+    return svg;
+  }
+
+  function spawnHeart(x, y, size, vx, vy, dur, dly) {
+    const el = document.createElement('div');
+    el.className = 'hp';
+    const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    const rot = (Math.random() - 0.5) * 90;
+    el.style.cssText = [
+      `left:${x - size/2}px`, `top:${y - size/2}px`,
+      `--tx:${vx}px`, `--ty:${vy}px`, `--ty60:${vy*0.45}px`,
+      `--rot:${rot}deg`, `--dur:${dur}s`, `--dly:${dly}s`,
+    ].join(';');
+    el.appendChild(makeHeartSVG(size, color));
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), (dur + dly) * 1000 + 80);
+  }
+
+  document.addEventListener('mousemove', e => {
+    const cx = e.clientX, cy = e.clientY;
+    wand.style.left = (cx - 19) + 'px';
+    wand.style.top  = (cy - 19) + 'px';
+    const dist = Math.hypot(cx - lastX, cy - lastY);
+    if (dist > 9) {
+      const n = Math.min(3, Math.floor(dist / 10) + 1);
+      for (let i = 0; i < n; i++) {
+        spawnHeart(cx + (Math.random()-0.5)*10, cy + (Math.random()-0.5)*10,
+          7 + Math.random()*9, (Math.random()-0.5)*28, 12 + Math.random()*28,
+          0.5 + Math.random()*0.35, Math.random()*0.07);
+      }
+      lastX = cx; lastY = cy;
+    }
+  });
+
+  document.addEventListener('click', e => {
+    const cx = e.clientX, cy = e.clientY;
+    for (let i = 0; i < 22; i++) {
+      const angle = (i / 22) * Math.PI * 2;
+      const spd = 45 + Math.random() * 80;
+      spawnHeart(cx, cy, 9 + Math.random()*16, Math.cos(angle)*spd, Math.sin(angle)*spd, 0.6 + Math.random()*0.5, Math.random()*0.12);
+    }
+    spawnHeart(cx, cy - 8, 26, (Math.random()-0.5)*20, -75, 0.9, 0);
+  });
+
+  document.querySelectorAll('a, button, .gallery-item').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('is-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('is-hover'));
+  });
+
+  document.getElementById('theme-btn').addEventListener('click', () => {
+    const isLig
