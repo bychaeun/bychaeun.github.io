@@ -25,7 +25,7 @@
   }
   }
   html { scroll-behavior: smooth; background: #0a0a0a; color-scheme: dark; }
-  body { background: var(--bg); color: var(--text); font-family: var(--font); font-weight: 400; line-height: 1.7; min-height: 100vh; transition: background 0.3s, color 0.3s; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); font-weight: 400; line-height: 1.7; min-height: 100vh; transition: background 0.3s, color 0.3s; -webkit-text-size-adjust: 100%; }
 
   /* ── WAND ── */
   #wand { position: fixed; z-index: 99999; pointer-events: none; width: 40px; height: 40px; }
@@ -80,6 +80,8 @@
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     animation: nameGrad 5s ease infinite;
     display: inline-block;
+    will-change: background-position;
+    -webkit-transform: translateZ(0); transform: translateZ(0);
   }
   #name-hit { font-weight: inherit; font-style: normal; }
   .hero-name span { display: block; -webkit-text-fill-color: var(--muted); color: var(--muted); font-size: 0.38em; font-weight: 300; letter-spacing: 0.06em; margin-top: 1.125rem; background: none; -webkit-background-clip: unset; background-clip: unset; animation: none; }
