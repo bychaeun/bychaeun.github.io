@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
 <title>정채은 — 3D 배경 모델러</title>
 <link href="https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/variable/woff2/SUIT-Variable.css" rel="stylesheet">
 <style>
@@ -22,15 +23,8 @@
     --text: #0a0a0a; --muted: #444440; --accent: #7a5a2a; --accent2: #0a0a0a;
     --nav-bg: rgba(245,242,238,0.9);
   }
-
-  @media (prefers-color-scheme: light) {
-    :root {
-      --bg: #f5f2ee; --bg2: #edeae5; --bg3: #e4e0da;
-      --line: rgba(0,0,0,0.08); --line2: rgba(0,0,0,0.13);
-      --text: #0a0a0a; --muted: #444440; --accent: #7a5a2a; --accent2: #0a0a0a;
-      --nav-bg: rgba(245,242,238,0.9);
-    }
   }
+  html { scroll-behavior: smooth; background: #0a0a0a; color-scheme: dark; }
   body { background: var(--bg); color: var(--text); font-family: var(--font); font-weight: 400; line-height: 1.7; min-height: 100vh; transition: background 0.3s, color 0.3s; }
 
   /* ── WAND ── */
@@ -939,30 +933,6 @@
       }, chars.length * 110 + 380);
     });
   }
-
-  // 시스템 다크/라이트 모드 자동 감지
-  (function() {
-    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    if (!prefersDark) {
-      document.body.classList.add('light');
-      document.getElementById('icon-sun').style.display  = 'none';
-      document.getElementById('icon-moon').style.display = 'block';
-    }
-    // 시스템 설정 변경 감지
-    if (window.matchMedia) {
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-        if (e.matches) {
-          document.body.classList.remove('light');
-          document.getElementById('icon-sun').style.display  = 'block';
-          document.getElementById('icon-moon').style.display = 'none';
-        } else {
-          document.body.classList.add('light');
-          document.getElementById('icon-sun').style.display  = 'none';
-          document.getElementById('icon-moon').style.display = 'block';
-        }
-      });
-    }
-  })();
 
   // 햄버거 메뉴
   var hamburger = document.getElementById('nav-hamburger');
