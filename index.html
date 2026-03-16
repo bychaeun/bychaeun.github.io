@@ -201,8 +201,20 @@
   .modal-img { width: 100%; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; background: var(--bg3); overflow: hidden; transition: opacity 0.4s; }
   .modal-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .modal-img svg { width: 48px; height: 48px; opacity: 0.15; }
-  .modal-dots { display: flex; gap: 6px; justify-content: center; padding: 0.8rem 0 0; }
-  .modal-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--line2); border: none; cursor: none; transition: background 0.2s; padding: 0; }
+  .modal-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(0,0,0,0.45); border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: none; color: white; transition: background 0.2s;
+    z-index: 10;
+  }
+  .modal-arrow:hover { background: rgba(0,0,0,0.75); }
+  .modal-arrow.prev { left: 12px; }
+  .modal-arrow.next { right: 12px; }
+  .modal-arrow svg { width: 16px; height: 16px; } display: flex; gap: 6px; justify-content: center; padding: 0.8rem 0 0; }
+  .modal-dots { display: flex; gap: 10px; justify-content: center; align-items: center; padding: 1rem 0; width: 100%; box-sizing: border-box; }
+  .modal-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.25); border: none; cursor: none; transition: background 0.25s; padding: 0; flex-shrink: 0; }
   .modal-dot.active { background: var(--accent); }
   .modal-info { padding: 1.2rem 1.5rem; display: flex; justify-content: space-between; align-items: flex-start; border-top: 1px solid var(--line); gap: 1rem; }
   .modal-title { font-size: 1rem; font-weight: 600; color: var(--accent2); margin-bottom: 0.3rem; }
@@ -419,6 +431,7 @@
     <button class="proj-tab active" data-proj="0">Mem:Rift</button>
     <button class="proj-tab" data-proj="1">Lumen Academy</button>
     <button class="proj-tab" data-proj="2">Bone &amp; Broth</button>
+    <button class="proj-tab" data-proj="3">Elementa</button>
   </div>
 
   <!-- 프로젝트 설명 -->
@@ -434,9 +447,17 @@
   <!-- 모달 -->
   <div class="modal-bg" id="modal">
     <div class="modal-box">
-      <!-- 슬라이드 이미지 -->
-      <div class="modal-img" id="modal-img">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 21V9"/></svg>
+      <!-- 슬라이드 이미지 + 화살표 -->
+      <div style="position:relative;">
+        <div class="modal-img" id="modal-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 21V9"/></svg>
+        </div>
+        <button class="modal-arrow prev" id="modal-prev">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="modal-arrow next" id="modal-next">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
       </div>
       <!-- 슬라이드 도트 -->
       <div class="modal-dots" id="modal-dots"></div>
@@ -669,8 +690,8 @@
       name: 'Mem:Rift',
       period: '개인 프로젝트 · Personal Project',
       desc: '\'감정의 균열\'을 주제로 한 사이버펑크 콘셉트의 개인 프로젝트입니다. 기획부터 시각적 연출 방향 설정까지 독자적으로 구상했습니다. 거친 구조, 차가운 금속성 재질, 네온 빛의 대비 등 사이버펑크적 미장센을 활용해 감정의 혼란과 파편화된 정서를 시각적으로 표현하였습니다.',
-      role: 'AI 원화 제작  ·  모델링 및 텍스처링  ·  언리얼 엔진 씬 구성 및 라이트 배치',
-      tools: '3ds Max  ·  Photoshop  ·  Illustrator  ·  Unreal Engine  ·  Substance Painter  ·  Midjourney  ·  ChatGPT',
+      role: 'AI 원화 제작  ·  AI 모델링 추출 및 리터치  ·  모델링 및 텍스처링  ·  언리얼 엔진 씬 구성 및 라이트 배치',
+      tools: '3ds Max  ·  Photoshop  ·  Illustrator  ·  Unreal Engine  ·  Substance Painter  ·  Midjourney  ·  ChatGPT  ·  Meshy AI',
       images: [null, null, null, null, null, null]
     },
     {
@@ -678,13 +699,23 @@
       period: '2026.01 — 02  ·  개인 프로젝트',
       desc: '콜로소 강의를 통해 현직자들의 텍스처링 방식과 제작 흐름을 배우고 싶어 이 프로젝트를 시작했습니다. 단순히 개별 오브젝트 연습에 그치지 않고, 학습한 내용을 실제 파이프라인으로 검증하기 위해 하나의 완성된 씬을 목표로 설정했습니다. 콘셉트는 작업 효율을 높이기 위해 AI로 원화를 생성해 방향성을 잡고, 이를 기반으로 모델링과 텍스처링을 진행했습니다.',
       role: 'AI 원화 제작  ·  모델링 및 텍스처링  ·  언리얼 엔진 씬 구성 및 라이트 배치',
-      tools: '3ds Max  ·  Photoshop  ·  Substance Painter  ·  Substance Designer  ·  Unreal Engine  ·  ChatGPT  ·  Midjourney',
+      tools: '3ds Max  ·  Photoshop  ·  Substance Painter  ·  Substance Designer  ·  ZBrush  ·  Unreal Engine  ·  ChatGPT  ·  Midjourney',
       images: [null, null, null, null, null, null]
     },
     {
       name: 'Bone & Broth',
-      period: '2023',
-      desc: '아늑한 음식점 배경을 구현한 작업물입니다. 3Ds Max와 Substance Painter를 활용해 제작했습니다.',
+      period: '2026.03  ·  개인 프로젝트',
+      desc: '죽음과 생존이 공존하는 던전을 실사적으로 재해석한 프로젝트입니다. 어둡고 위협적인 공간 속에서도 인간은 불을 피우고, 음식을 조리하고, 머물 자리를 만들며 삶을 이어갑니다. 이 작업은 던전을 단순한 전투의 배경이 아닌, 생존을 위해 의식주가 쌓여온 생활의 흔적이 남은 공간으로 바라보고 표현했습니다.',
+      role: 'AI 원화 제작  ·  모델링 및 텍스처링  ·  언리얼 엔진 씬 구성 및 라이트 배치',
+      tools: '3ds Max  ·  Photoshop  ·  Substance Painter  ·  ZBrush  ·  Unreal Engine  ·  ChatGPT  ·  Midjourney',
+      images: [null, null, null, null, null, null]
+    },
+    {
+      name: 'Elementa',
+      period: '2026.03  ·  개인 프로젝트',
+      desc: '물, 불, 바람, 천상 등 다양한 원소를 상징하는 토템과 성소를 판타지 세계관으로 구현한 로우폴리 3D 에셋입니다. 각 원소의 성격과 힘을 시각적으로 해석하여 형태, 색감, 구조물 디테일에 반영했으며 전체 스타일은 로우폴리 기반의 미니멀하고 상징적인 형태로 구성했습니다.',
+      role: 'AI 원화 제작  ·  3ds Max 모델링 및 텍스처링  ·  AI 모델링 리터치  ·  언리얼 엔진 씬 배치 및 라이팅',
+      tools: '3ds Max  ·  Illustrator  ·  Photoshop  ·  Substance Painter  ·  Unreal Engine  ·  Meshy AI  ·  ChatGPT  ·  Midjourney',
       images: [null, null, null, null, null, null]
     }
   ];
@@ -743,9 +774,10 @@
 
     var dots = document.getElementById('modal-dots');
     dots.innerHTML = '';
+    dots.style.cssText = 'display:flex;gap:10px;justify-content:center;align-items:center;padding:1rem 0;width:100%;';
     for (var i = 0; i < 6; i++) {
       var d = document.createElement('button');
-      d.className = 'modal-dot' + (i === slideIdx ? ' active' : '');
+      d.style.cssText = 'width:7px;height:7px;border-radius:50%;border:none;padding:0;flex-shrink:0;cursor:none;transition:background 0.25s;background:' + (i === slideIdx ? '#c8b89a' : 'rgba(255,255,255,0.3)') + ';';
       d.setAttribute('data-i', i);
       d.addEventListener('click', function(e) {
         e.stopPropagation();
@@ -793,7 +825,26 @@
   // 모달 닫기
   document.getElementById('modal-close').addEventListener('click', closeModal);
   document.getElementById('modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
-  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+    if (e.key === 'ArrowRight') { clearInterval(slideTimer); modalSlideIndex = (modalSlideIndex+1)%6; renderModalSlide(currentProj, modalSlideIndex); startSlideTimer(); }
+    if (e.key === 'ArrowLeft')  { clearInterval(slideTimer); modalSlideIndex = (modalSlideIndex+5)%6; renderModalSlide(currentProj, modalSlideIndex); startSlideTimer(); }
+  });
+
+  document.getElementById('modal-prev').addEventListener('click', function(e) {
+    e.stopPropagation();
+    clearInterval(slideTimer);
+    modalSlideIndex = (modalSlideIndex + 5) % 6;
+    renderModalSlide(currentProj, modalSlideIndex);
+    startSlideTimer();
+  });
+  document.getElementById('modal-next').addEventListener('click', function(e) {
+    e.stopPropagation();
+    clearInterval(slideTimer);
+    modalSlideIndex = (modalSlideIndex + 1) % 6;
+    renderModalSlide(currentProj, modalSlideIndex);
+    startSlideTimer();
+  });
 
   // 초기 렌더
   renderGallery(0);
