@@ -940,6 +940,30 @@
     });
   }
 
+  // 시스템 다크/라이트 모드 자동 감지
+  (function() {
+    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (!prefersDark) {
+      document.body.classList.add('light');
+      document.getElementById('icon-sun').style.display  = 'none';
+      document.getElementById('icon-moon').style.display = 'block';
+    }
+    // 시스템 설정 변경 감지
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+        if (e.matches) {
+          document.body.classList.remove('light');
+          document.getElementById('icon-sun').style.display  = 'block';
+          document.getElementById('icon-moon').style.display = 'none';
+        } else {
+          document.body.classList.add('light');
+          document.getElementById('icon-sun').style.display  = 'none';
+          document.getElementById('icon-moon').style.display = 'block';
+        }
+      });
+    }
+  })();
+
   // 햄버거 메뉴
   var hamburger = document.getElementById('nav-hamburger');
   var navLinks = document.getElementById('nav-links');
