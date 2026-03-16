@@ -78,7 +78,10 @@
     background-size: 200% 200%;
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     animation: nameGrad 5s ease infinite;
+    display: inline-block;
   }
+  #name-hit { font-weight: inherit; font-style: normal; }
+  .hero-name span { display: block; -webkit-text-fill-color: var(--muted); color: var(--muted); font-size: 0.38em; font-weight: 300; letter-spacing: 0.06em; margin-top: 1.125rem; background: none; -webkit-background-clip: unset; background-clip: unset; animation: none; }
   @keyframes nameGrad {
     0%   { background-position: 0% 50%; }
     50%  { background-position: 100% 50%; }
@@ -117,7 +120,13 @@
     100% { transform: rotate(360deg) scale(1); }
   }
   @media (max-width: 768px) { .hero-star { display: none; } }
-  /* ── 모핑 도형 ── */
+  /* 갤러리 하이라이트 */
+  @keyframes galleryHighlight {
+    0%   { box-shadow: 0 0 0 0 rgba(200,184,154,0); }
+    30%  { box-shadow: 0 0 0 6px rgba(200,184,154,0.35); }
+    100% { box-shadow: 0 0 0 0 rgba(200,184,154,0); }
+  }
+  .gallery-flash { animation: galleryHighlight 1.2s ease-out forwards; }
   .hero-morph {
     position: absolute;
     top: 50%; right: 5rem;
@@ -325,10 +334,7 @@
   </div>
 
   <div class="hero-eyebrow">3D Background Modeler</div>
-  <h1 class="hero-name">
-    정채은
-    <span>3D Environment Artist</span>
-  </h1>
+  <h1 class="hero-name" id="hero-name"><b id="name-hit">정채은</b><span>3D Environment Artist</span></h1>
   <p class="hero-desc">
     플레이어가 공간에 들어섰을 때 '어? 여긴 어디지?'라는 호기심을 만들고<br>
     기대감을 전하고 싶은 3D 배경 모델러입니다.<br>
@@ -340,7 +346,7 @@
     <span class="hero-meta-div">·</span>
     <span>거제 출생</span>
   </div>
-  <a class="hero-cta" href="#works">View Works →</a>
+  <a class="hero-cta" href="javascript:void(0)" id="view-works-btn">View Works →</a>
   <div class="hero-index">Portfolio 2026</div>
 </section>
 
@@ -772,6 +778,85 @@
 
   // 초기 렌더
   renderGallery(0);
+
+  // 이스터에그: 이름 클릭 → 파도타기
+  // 이스터에그: 이름 클릭 → 파도타기
+  var heroNameEl = document.getElementById('hero-name');
+  var nameHitEl = document.getElementById('name-hit');
+  if (heroNameEl && nameHitEl) {
+    nameHitEl.style.cursor = 'none';
+    nameHitEl.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (heroNameEl.dataset.animating) return;
+      heroNameEl.dataset.animating = '1';
+
+      // 텍스트 노드 찾기
+      var textNode = null;
+      for (var i = 0; i < nameHitEl.childNodes.length; i++) {
+        var n = nameHitEl.childNodes[i];
+        if (n.nodeType === 3 && n.textContent.trim().length > 0) { textNode = n; break; }
+      }
+      if (!textNode) { delete heroNameEl.dataset.animating; return; }
+
+      var chars = ['정','채','은'];
+      var btags = [];
+      var frag = document.createDocumentFragment();
+      chars.forEach(function(c) {
+        var b = document.createElement('b');
+        b.textContent = c;
+        b.style.cssText = 'display:inline-block;font-weight:inherit;font-size:1em;';
+        frag.appendChild(b);
+        btags.push(b);
+      });
+      nameHitEl.replaceChild(frag, textNode);
+
+      // 파도타기 + 하트 팡
+      btags.forEach(function(b, i) {
+        setTimeout(function() {
+          var rect = b.getBoundingClientRect();
+          var cx = rect.left + rect.width / 2;
+          var cy = rect.top + rect.height / 2;
+          for (var j = 0; j < 6; j++) {
+            var angle = (j / 6) * Math.PI * 2;
+            var spd = 25 + Math.random() * 35;
+            spawnHeart(cx + (Math.random()-0.5)*rect.width*0.5, cy, 12 + Math.random()*14, Math.cos(angle)*spd, Math.sin(angle)*spd - 15, 0.4 + Math.random()*0.3, Math.random()*0.05);
+          }
+          b.style.transition = 'transform 0.18s cubic-bezier(0.34,1.56,0.64,1)';
+          b.style.transform = 'translateY(-24px)';
+          setTimeout(function() { b.style.transform = 'translateY(0)'; }, 180);
+        }, i * 110);
+      });
+
+      // 복원
+      setTimeout(function() {
+        var newText = document.createTextNode('정채은');
+        nameHitEl.replaceChild(newText, btags[0]);
+        btags[1].remove();
+        btags[2].remove();
+        delete heroNameEl.dataset.animating;
+      }, chars.length * 110 + 380);
+    });
+  }
+
+  // View Works 클릭 → 부드럽게 스크롤 + 갤러리 하이라이트
+  var viewWorksBtn = document.getElementById('view-works-btn');
+  if (viewWorksBtn) {
+    viewWorksBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var worksSection = document.getElementById('works');
+      if (!worksSection) return;
+      worksSection.scrollIntoView({ behavior: 'smooth' });
+      setTimeout(function() {
+        var grid = document.getElementById('gallery-grid');
+        if (grid) {
+          grid.classList.remove('gallery-flash');
+          void grid.offsetWidth;
+          grid.classList.add('gallery-flash');
+          setTimeout(function() { grid.classList.remove('gallery-flash'); }, 1200);
+        }
+      }, 700);
+    });
+  }
 
   document.getElementById('theme-btn').addEventListener('click', function() {
     var isLight = document.body.classList.toggle('light');
