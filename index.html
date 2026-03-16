@@ -23,7 +23,14 @@
     --nav-bg: rgba(245,242,238,0.9);
   }
 
-  html { scroll-behavior: smooth; }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f5f2ee; --bg2: #edeae5; --bg3: #e4e0da;
+      --line: rgba(0,0,0,0.08); --line2: rgba(0,0,0,0.13);
+      --text: #0a0a0a; --muted: #444440; --accent: #7a5a2a; --accent2: #0a0a0a;
+      --nav-bg: rgba(245,242,238,0.9);
+    }
+  }
   body { background: var(--bg); color: var(--text); font-family: var(--font); font-weight: 400; line-height: 1.7; min-height: 100vh; transition: background 0.3s, color 0.3s; }
 
   /* ── WAND ── */
