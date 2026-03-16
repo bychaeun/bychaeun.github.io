@@ -170,6 +170,7 @@
   .trait-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
 
   /* ── GALLERY ── */
+  .works-personal-label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.8rem; }
   .proj-tabs { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 2rem; flex-wrap: wrap; }
   .proj-tab {
     background: none; border: 1px solid var(--line2); border-radius: 999px;
@@ -207,7 +208,9 @@
   .modal-title { font-size: 1rem; font-weight: 600; color: var(--accent2); margin-bottom: 0.3rem; }
   .modal-period { font-size: 0.75rem; color: var(--accent); letter-spacing: 0.06em; margin-bottom: 0.5rem; }
   .modal-sub { font-size: 0.82rem; font-weight: 300; color: var(--muted); line-height: 1.7; max-width: 580px; }
-  .modal-close { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line2); background: transparent; display: flex; align-items: center; justify-content: center; cursor: none; color: var(--text); font-size: 1rem; transition: background 0.2s; flex-shrink: 0; }
+  .modal-role  { font-size: 0.78rem; font-weight: 400; color: var(--text); margin-top: 0.8rem; line-height: 1.7; }
+  .modal-tools { font-size: 0.72rem; font-weight: 400; color: var(--accent); margin-top: 0.4rem; letter-spacing: 0.04em; }
+  .modal-close { width: 32px; height: 32px; border-radius: 50%; border: none; background: transparent; display: flex; align-items: center; justify-content: center; cursor: none; color: var(--muted); transition: color 0.2s, background 0.2s; flex-shrink: 0; padding: 0; }
   .modal-close:hover { background: var(--line); }
 
   /* ── EXPERIENCE ── */
@@ -409,6 +412,7 @@
 <!-- WORKS -->
 <section id="works">
   <div class="section-label">02 — Works</div>
+  <div class="works-personal-label">개인 작업물 · Personal Projects</div>
 
   <!-- 프로젝트 탭 -->
   <div class="proj-tabs">
@@ -438,12 +442,19 @@
       <div class="modal-dots" id="modal-dots"></div>
       <!-- 정보 -->
       <div class="modal-info">
-        <div>
+        <div style="flex:1;">
           <div class="modal-title" id="modal-title"></div>
           <div class="modal-period" id="modal-period"></div>
           <div class="modal-sub" id="modal-desc"></div>
+          <div class="modal-role" id="modal-role"></div>
+          <div class="modal-tools" id="modal-tools"></div>
         </div>
-        <button class="modal-close" id="modal-close">✕</button>
+        <button class="modal-close" id="modal-close">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <line x1="1" y1="1" x2="13" y2="13"/>
+            <line x1="13" y1="1" x2="1" y2="13"/>
+          </svg>
+        </button>
       </div>
     </div>
   </div>
@@ -656,14 +667,18 @@
   var PROJECTS = [
     {
       name: 'Mem:Rift',
-      period: '2024',
-      desc: '기억과 현실의 경계가 무너지는 공간을 배경으로 한 게임 환경 작업물입니다. UE5 기반으로 제작되었습니다.',
+      period: '개인 프로젝트 · Personal Project',
+      desc: '\'감정의 균열\'을 주제로 한 사이버펑크 콘셉트의 개인 프로젝트입니다. 기획부터 시각적 연출 방향 설정까지 독자적으로 구상했습니다. 거친 구조, 차가운 금속성 재질, 네온 빛의 대비 등 사이버펑크적 미장센을 활용해 감정의 혼란과 파편화된 정서를 시각적으로 표현하였습니다.',
+      role: 'AI 원화 제작  ·  모델링 및 텍스처링  ·  언리얼 엔진 씬 구성 및 라이트 배치',
+      tools: '3ds Max  ·  Photoshop  ·  Illustrator  ·  Unreal Engine  ·  Substance Painter  ·  Midjourney  ·  ChatGPT',
       images: [null, null, null, null, null, null]
     },
     {
       name: 'Lumen Academy',
-      period: '2024',
-      desc: '빛을 테마로 한 교육 공간 배경 모델링 작업물입니다. 모듈형 구조로 최적화된 애셋을 제작했습니다.',
+      period: '2026.01 — 02  ·  개인 프로젝트',
+      desc: '콜로소 강의를 통해 현직자들의 텍스처링 방식과 제작 흐름을 배우고 싶어 이 프로젝트를 시작했습니다. 단순히 개별 오브젝트 연습에 그치지 않고, 학습한 내용을 실제 파이프라인으로 검증하기 위해 하나의 완성된 씬을 목표로 설정했습니다. 콘셉트는 작업 효율을 높이기 위해 AI로 원화를 생성해 방향성을 잡고, 이를 기반으로 모델링과 텍스처링을 진행했습니다.',
+      role: 'AI 원화 제작  ·  모델링 및 텍스처링  ·  언리얼 엔진 씬 구성 및 라이트 배치',
+      tools: '3ds Max  ·  Photoshop  ·  Substance Painter  ·  Substance Designer  ·  Unreal Engine  ·  ChatGPT  ·  Midjourney',
       images: [null, null, null, null, null, null]
     },
     {
@@ -721,6 +736,10 @@
     document.getElementById('modal-title').textContent = proj.name;
     document.getElementById('modal-period').textContent = proj.period;
     document.getElementById('modal-desc').textContent = proj.desc;
+    var roleEl = document.getElementById('modal-role');
+    var toolsEl = document.getElementById('modal-tools');
+    if (roleEl) roleEl.textContent = proj.role || '';
+    if (toolsEl) toolsEl.textContent = proj.tools ? '🛠 ' + proj.tools : '';
 
     var dots = document.getElementById('modal-dots');
     dots.innerHTML = '';
