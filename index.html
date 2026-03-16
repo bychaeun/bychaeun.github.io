@@ -310,6 +310,13 @@
     .exp-item { grid-template-columns: 1fr; gap: 0.8rem; }
     .gallery-grid { grid-template-columns: repeat(2, 1fr); }
   }
+
+  @media (max-width: 768px) {
+    .hero-name, .about-title {
+      animation: none !important;
+      background-position: 60% 50% !important;
+    }
+  }
 </style>
 </head>
 <body>
