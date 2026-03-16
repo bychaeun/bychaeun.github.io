@@ -69,8 +69,8 @@
 
   /* ── HERO ── */
   .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 3rem 5rem; position: relative; overflow: hidden; }
-  .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 80% 40%, rgba(200,184,154,0.04) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 20% 80%, rgba(140,120,90,0.06) 0%, transparent 60%); }
-  .hero-grid { position: absolute; inset: 0; opacity: 0.03; background-image: linear-gradient(var(--text) 1px, transparent 1px), linear-gradient(90deg, var(--text) 1px, transparent 1px); background-size: 80px 80px; }
+  .hero-bg { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 60% 50% at 80% 40%, rgba(200,184,154,0.04) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 20% 80%, rgba(140,120,90,0.06) 0%, transparent 60%); }
+  .hero-grid { position: absolute; inset: 0; pointer-events: none; opacity: 0.03; background-image: linear-gradient(var(--text) 1px, transparent 1px), linear-gradient(90deg, var(--text) 1px, transparent 1px); background-size: 80px 80px; }
   .hero-eyebrow { font-size: 0.805rem; font-weight: 400; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.625rem; display: flex; align-items: center; gap: 1.125rem; }
   .hero-eyebrow::before { content: ''; width: 40px; height: 1px; background: var(--accent); }
   .hero-name { font-weight: 700; font-size: clamp(3.75rem, 8vw, 7.25rem); line-height: 0.95; letter-spacing: -0.02em; position: relative; margin-bottom: 2.125rem;
@@ -346,7 +346,7 @@
     <span class="hero-meta-div">·</span>
     <span>거제 출생</span>
   </div>
-  <a class="hero-cta" href="javascript:void(0)" id="view-works-btn">View Works →</a>
+  <a class="hero-cta" href="#works">View Works →</a>
   <div class="hero-index">Portfolio 2026</div>
 </section>
 
@@ -835,26 +835,6 @@
         btags[2].remove();
         delete heroNameEl.dataset.animating;
       }, chars.length * 110 + 380);
-    });
-  }
-
-  // View Works 클릭 → 부드럽게 스크롤 + 갤러리 하이라이트
-  var viewWorksBtn = document.getElementById('view-works-btn');
-  if (viewWorksBtn) {
-    viewWorksBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      var worksSection = document.getElementById('works');
-      if (!worksSection) return;
-      worksSection.scrollIntoView({ behavior: 'smooth' });
-      setTimeout(function() {
-        var grid = document.getElementById('gallery-grid');
-        if (grid) {
-          grid.classList.remove('gallery-flash');
-          void grid.offsetWidth;
-          grid.classList.add('gallery-flash');
-          setTimeout(function() { grid.classList.remove('gallery-flash'); }, 1200);
-        }
-      }, 700);
     });
   }
 
