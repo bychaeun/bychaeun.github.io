@@ -911,10 +911,13 @@
       var chars = ['정','채','은'];
       var btags = [];
       var frag = document.createDocumentFragment();
+      var isLight = document.body.classList.contains('light');
       chars.forEach(function(c) {
         var b = document.createElement('b');
         b.textContent = c;
-        b.style.cssText = 'display:inline-block;font-weight:inherit;font-size:1em;';
+        b.style.cssText = 'display:inline-block;font-weight:inherit;font-size:1em;'
+          + '-webkit-text-fill-color:' + (isLight ? '#be4a6e' : '#f0a0b8') + ';'
+          + 'color:' + (isLight ? '#be4a6e' : '#f0a0b8') + ';';
         frag.appendChild(b);
         btags.push(b);
       });
